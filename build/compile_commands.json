@@ -1,0 +1,7 @@
+[
+{
+  "directory": "/SD/Filehub/build",
+  "command": "/bin/x86_64-linux-gnu-g++-10  -I/SD/Filehub/include  -g -std=c++11 -Wall -O2 -g -o CMakeFiles/main.dir/src/main.cpp.o -c /SD/Filehub/src/main.cpp",
+  "file": "/SD/Filehub/src/main.cpp"
+}
+]

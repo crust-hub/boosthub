@@ -1,0 +1,1 @@
+/bin/x86_64-linux-gnu-g++-10  -g -std=c++11 -Wall -O2 -g CMakeFiles/main.dir/src/main.cpp.o -o ../bin/main 

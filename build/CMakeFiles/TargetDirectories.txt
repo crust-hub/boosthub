@@ -1,0 +1,13 @@
+/SD/Filehub/build/CMakeFiles/install/strip.dir
+/SD/Filehub/build/CMakeFiles/install/local.dir
+/SD/Filehub/build/CMakeFiles/install.dir
+/SD/Filehub/build/CMakeFiles/list_install_components.dir
+/SD/Filehub/build/CMakeFiles/rebuild_cache.dir
+/SD/Filehub/build/CMakeFiles/edit_cache.dir
+/SD/Filehub/build/CMakeFiles/main.dir
+/SD/Filehub/build/src/CMakeFiles/install/strip.dir
+/SD/Filehub/build/src/CMakeFiles/install/local.dir
+/SD/Filehub/build/src/CMakeFiles/install.dir
+/SD/Filehub/build/src/CMakeFiles/list_install_components.dir
+/SD/Filehub/build/src/CMakeFiles/rebuild_cache.dir
+/SD/Filehub/build/src/CMakeFiles/edit_cache.dir
