@@ -3,5 +3,15 @@
   "directory": "/SD/Filehub/build",
   "command": "/bin/x86_64-linux-gnu-g++-10  -I/SD/Filehub/include  -g -std=c++11 -Wall -O2 -g -o CMakeFiles/main.dir/src/main.cpp.o -c /SD/Filehub/src/main.cpp",
   "file": "/SD/Filehub/src/main.cpp"
+},
+{
+  "directory": "/SD/Filehub/build",
+  "command": "/bin/x86_64-linux-gnu-g++-10  -I/SD/Filehub/include  -g -std=c++11 -Wall -O2 -g -o CMakeFiles/main.dir/src/UserInputProcess/ArgcArgvProcess.cpp.o -c /SD/Filehub/src/UserInputProcess/ArgcArgvProcess.cpp",
+  "file": "/SD/Filehub/src/UserInputProcess/ArgcArgvProcess.cpp"
+},
+{
+  "directory": "/SD/Filehub/build",
+  "command": "/bin/x86_64-linux-gnu-g++-10  -I/SD/Filehub/include  -g -std=c++11 -Wall -O2 -g -o CMakeFiles/main.dir/src/FileControll/kk.cpp.o -c /SD/Filehub/src/FileControll/kk.cpp",
+  "file": "/SD/Filehub/src/FileControll/kk.cpp"
 }
 ]

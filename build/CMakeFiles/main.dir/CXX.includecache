@@ -6,7 +6,11 @@
 
 #IncludeRegexTransform: 
 
-/SD/Filehub/src/main.cpp
-iostream
+../include/UserInputProcess/ArgcArgvProcess.h
+cstdio
 -
+
+/SD/Filehub/src/UserInputProcess/ArgcArgvProcess.cpp
+UserInputProcess/ArgcArgvProcess.h
+/SD/Filehub/src/UserInputProcess/UserInputProcess/ArgcArgvProcess.h
 

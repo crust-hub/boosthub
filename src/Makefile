@@ -70,7 +70,7 @@ EQUALS = =
 CMAKE_SOURCE_DIR = /SD/Filehub
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /SD/Filehub/build
+CMAKE_BINARY_DIR = /SD/Filehub
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -145,14 +145,14 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /SD/Filehub/build/CMakeFiles /SD/Filehub/build//CMakeFiles/progress.marks
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /SD/Filehub/build/CMakeFiles 0
+	cd /SD/Filehub && $(CMAKE_COMMAND) -E cmake_progress_start /SD/Filehub/CMakeFiles /SD/Filehub/src//CMakeFiles/progress.marks
+	cd /SD/Filehub && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 src/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /SD/Filehub/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 clean
+	cd /SD/Filehub && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 src/clean
 .PHONY : clean
 
 # The main clean target
@@ -162,112 +162,18 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 preinstall
+	cd /SD/Filehub && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 src/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 preinstall
+	cd /SD/Filehub && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 src/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	$(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /SD/Filehub && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
-
-#=============================================================================
-# Target rules for targets named main
-
-# Build rule for target.
-main: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 main
-.PHONY : main
-
-# fast build rule for target.
-main/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/build
-.PHONY : main/fast
-
-src/FileControll/kk.o: src/FileControll/kk.cpp.o
-
-.PHONY : src/FileControll/kk.o
-
-# target to build an object file
-src/FileControll/kk.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/FileControll/kk.cpp.o
-.PHONY : src/FileControll/kk.cpp.o
-
-src/FileControll/kk.i: src/FileControll/kk.cpp.i
-
-.PHONY : src/FileControll/kk.i
-
-# target to preprocess a source file
-src/FileControll/kk.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/FileControll/kk.cpp.i
-.PHONY : src/FileControll/kk.cpp.i
-
-src/FileControll/kk.s: src/FileControll/kk.cpp.s
-
-.PHONY : src/FileControll/kk.s
-
-# target to generate assembly for a file
-src/FileControll/kk.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/FileControll/kk.cpp.s
-.PHONY : src/FileControll/kk.cpp.s
-
-src/UserInputProcess/ArgcArgvProcess.o: src/UserInputProcess/ArgcArgvProcess.cpp.o
-
-.PHONY : src/UserInputProcess/ArgcArgvProcess.o
-
-# target to build an object file
-src/UserInputProcess/ArgcArgvProcess.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/UserInputProcess/ArgcArgvProcess.cpp.o
-.PHONY : src/UserInputProcess/ArgcArgvProcess.cpp.o
-
-src/UserInputProcess/ArgcArgvProcess.i: src/UserInputProcess/ArgcArgvProcess.cpp.i
-
-.PHONY : src/UserInputProcess/ArgcArgvProcess.i
-
-# target to preprocess a source file
-src/UserInputProcess/ArgcArgvProcess.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/UserInputProcess/ArgcArgvProcess.cpp.i
-.PHONY : src/UserInputProcess/ArgcArgvProcess.cpp.i
-
-src/UserInputProcess/ArgcArgvProcess.s: src/UserInputProcess/ArgcArgvProcess.cpp.s
-
-.PHONY : src/UserInputProcess/ArgcArgvProcess.s
-
-# target to generate assembly for a file
-src/UserInputProcess/ArgcArgvProcess.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/UserInputProcess/ArgcArgvProcess.cpp.s
-.PHONY : src/UserInputProcess/ArgcArgvProcess.cpp.s
-
-src/main.o: src/main.cpp.o
-
-.PHONY : src/main.o
-
-# target to build an object file
-src/main.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/main.cpp.o
-.PHONY : src/main.cpp.o
-
-src/main.i: src/main.cpp.i
-
-.PHONY : src/main.i
-
-# target to preprocess a source file
-src/main.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/main.cpp.i
-.PHONY : src/main.cpp.i
-
-src/main.s: src/main.cpp.s
-
-.PHONY : src/main.s
-
-# target to generate assembly for a file
-src/main.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/main.cpp.s
-.PHONY : src/main.cpp.s
 
 # Help Target
 help:
@@ -281,16 +187,6 @@ help:
 	@echo "... install/strip"
 	@echo "... list_install_components"
 	@echo "... rebuild_cache"
-	@echo "... main"
-	@echo "... src/FileControll/kk.o"
-	@echo "... src/FileControll/kk.i"
-	@echo "... src/FileControll/kk.s"
-	@echo "... src/UserInputProcess/ArgcArgvProcess.o"
-	@echo "... src/UserInputProcess/ArgcArgvProcess.i"
-	@echo "... src/UserInputProcess/ArgcArgvProcess.s"
-	@echo "... src/main.o"
-	@echo "... src/main.i"
-	@echo "... src/main.s"
 .PHONY : help
 
 
@@ -302,6 +198,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	$(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /SD/Filehub && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 
