@@ -53,9 +53,9 @@
 			[
 				{
 					"directoryIndex" : 0,
-					"id" : "main::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-main-Debug-c5096427fe1234a59e4f.json",
-					"name" : "main",
+					"id" : "Filehub::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-Filehub-Debug-6bf30ed0ef008f943b73.json",
+					"name" : "Filehub",
 					"projectIndex" : 0
 				}
 			]

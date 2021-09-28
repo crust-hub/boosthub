@@ -1,0 +1,32 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../include/FileControll/kk.h
+iostream
+-
+
+../include/Log/Log.h
+iostream
+-
+ctime
+-
+
+../include/UserInputProcess/ArgcArgvProcess.h
+cstdio
+-
+
+/SD/Filehub/src/main.cpp
+iostream
+-
+FileControll/kk.h
+/SD/Filehub/src/FileControll/kk.h
+Log/Log.h
+/SD/Filehub/src/Log/Log.h
+UserInputProcess/ArgcArgvProcess.h
+/SD/Filehub/src/UserInputProcess/ArgcArgvProcess.h
+

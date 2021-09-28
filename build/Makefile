@@ -176,17 +176,17 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named main
+# Target rules for targets named Filehub
 
 # Build rule for target.
-main: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 main
-.PHONY : main
+Filehub: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 Filehub
+.PHONY : Filehub
 
 # fast build rule for target.
-main/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/build
-.PHONY : main/fast
+Filehub/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Filehub.dir/build.make CMakeFiles/Filehub.dir/build
+.PHONY : Filehub/fast
 
 src/FileControll/kk.o: src/FileControll/kk.cpp.o
 
@@ -194,7 +194,7 @@ src/FileControll/kk.o: src/FileControll/kk.cpp.o
 
 # target to build an object file
 src/FileControll/kk.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/FileControll/kk.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Filehub.dir/build.make CMakeFiles/Filehub.dir/src/FileControll/kk.cpp.o
 .PHONY : src/FileControll/kk.cpp.o
 
 src/FileControll/kk.i: src/FileControll/kk.cpp.i
@@ -203,7 +203,7 @@ src/FileControll/kk.i: src/FileControll/kk.cpp.i
 
 # target to preprocess a source file
 src/FileControll/kk.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/FileControll/kk.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Filehub.dir/build.make CMakeFiles/Filehub.dir/src/FileControll/kk.cpp.i
 .PHONY : src/FileControll/kk.cpp.i
 
 src/FileControll/kk.s: src/FileControll/kk.cpp.s
@@ -212,7 +212,7 @@ src/FileControll/kk.s: src/FileControll/kk.cpp.s
 
 # target to generate assembly for a file
 src/FileControll/kk.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/FileControll/kk.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Filehub.dir/build.make CMakeFiles/Filehub.dir/src/FileControll/kk.cpp.s
 .PHONY : src/FileControll/kk.cpp.s
 
 src/UserInputProcess/ArgcArgvProcess.o: src/UserInputProcess/ArgcArgvProcess.cpp.o
@@ -221,7 +221,7 @@ src/UserInputProcess/ArgcArgvProcess.o: src/UserInputProcess/ArgcArgvProcess.cpp
 
 # target to build an object file
 src/UserInputProcess/ArgcArgvProcess.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/UserInputProcess/ArgcArgvProcess.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Filehub.dir/build.make CMakeFiles/Filehub.dir/src/UserInputProcess/ArgcArgvProcess.cpp.o
 .PHONY : src/UserInputProcess/ArgcArgvProcess.cpp.o
 
 src/UserInputProcess/ArgcArgvProcess.i: src/UserInputProcess/ArgcArgvProcess.cpp.i
@@ -230,7 +230,7 @@ src/UserInputProcess/ArgcArgvProcess.i: src/UserInputProcess/ArgcArgvProcess.cpp
 
 # target to preprocess a source file
 src/UserInputProcess/ArgcArgvProcess.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/UserInputProcess/ArgcArgvProcess.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Filehub.dir/build.make CMakeFiles/Filehub.dir/src/UserInputProcess/ArgcArgvProcess.cpp.i
 .PHONY : src/UserInputProcess/ArgcArgvProcess.cpp.i
 
 src/UserInputProcess/ArgcArgvProcess.s: src/UserInputProcess/ArgcArgvProcess.cpp.s
@@ -239,7 +239,7 @@ src/UserInputProcess/ArgcArgvProcess.s: src/UserInputProcess/ArgcArgvProcess.cpp
 
 # target to generate assembly for a file
 src/UserInputProcess/ArgcArgvProcess.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/UserInputProcess/ArgcArgvProcess.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Filehub.dir/build.make CMakeFiles/Filehub.dir/src/UserInputProcess/ArgcArgvProcess.cpp.s
 .PHONY : src/UserInputProcess/ArgcArgvProcess.cpp.s
 
 src/main.o: src/main.cpp.o
@@ -248,7 +248,7 @@ src/main.o: src/main.cpp.o
 
 # target to build an object file
 src/main.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/main.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Filehub.dir/build.make CMakeFiles/Filehub.dir/src/main.cpp.o
 .PHONY : src/main.cpp.o
 
 src/main.i: src/main.cpp.i
@@ -257,7 +257,7 @@ src/main.i: src/main.cpp.i
 
 # target to preprocess a source file
 src/main.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/main.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Filehub.dir/build.make CMakeFiles/Filehub.dir/src/main.cpp.i
 .PHONY : src/main.cpp.i
 
 src/main.s: src/main.cpp.s
@@ -266,7 +266,7 @@ src/main.s: src/main.cpp.s
 
 # target to generate assembly for a file
 src/main.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/main.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Filehub.dir/build.make CMakeFiles/Filehub.dir/src/main.cpp.s
 .PHONY : src/main.cpp.s
 
 # Help Target
@@ -281,7 +281,7 @@ help:
 	@echo "... install/strip"
 	@echo "... list_install_components"
 	@echo "... rebuild_cache"
-	@echo "... main"
+	@echo "... Filehub"
 	@echo "... src/FileControll/kk.o"
 	@echo "... src/FileControll/kk.i"
 	@echo "... src/FileControll/kk.s"

@@ -2,7 +2,7 @@
 	"artifacts" : 
 	[
 		{
-			"path" : "/SD/Filehub/bin/main"
+			"path" : "/SD/Filehub/bin/Filehub"
 		}
 	],
 	"backtrace" : 1,
@@ -68,7 +68,7 @@
 			]
 		}
 	],
-	"id" : "main::@6890427a1f51a3e7e1df",
+	"id" : "Filehub::@6890427a1f51a3e7e1df",
 	"install" : 
 	{
 		"destinations" : 
@@ -98,8 +98,8 @@
 		],
 		"language" : "CXX"
 	},
-	"name" : "main",
-	"nameOnDisk" : "main",
+	"name" : "Filehub",
+	"nameOnDisk" : "Filehub",
 	"paths" : 
 	{
 		"build" : ".",

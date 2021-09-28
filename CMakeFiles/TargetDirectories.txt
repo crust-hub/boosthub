@@ -4,7 +4,7 @@
 /SD/Filehub/CMakeFiles/list_install_components.dir
 /SD/Filehub/CMakeFiles/rebuild_cache.dir
 /SD/Filehub/CMakeFiles/edit_cache.dir
-/SD/Filehub/CMakeFiles/main.dir
+/SD/Filehub/CMakeFiles/Filehub.dir
 /SD/Filehub/src/CMakeFiles/install/strip.dir
 /SD/Filehub/src/CMakeFiles/install/local.dir
 /SD/Filehub/src/CMakeFiles/install.dir

@@ -72,7 +72,7 @@ CMAKE_BINARY_DIR = /SD/Filehub/build
 # Directory level rules for the build root directory
 
 # The main recursive "all" target.
-all: CMakeFiles/main.dir/all
+all: CMakeFiles/Filehub.dir/all
 all: src/all
 
 .PHONY : all
@@ -83,7 +83,7 @@ preinstall: src/preinstall
 .PHONY : preinstall
 
 # The main recursive "clean" target.
-clean: CMakeFiles/main.dir/clean
+clean: CMakeFiles/Filehub.dir/clean
 clean: src/clean
 
 .PHONY : clean
@@ -107,31 +107,31 @@ src/clean:
 .PHONY : src/clean
 
 #=============================================================================
-# Target rules for target CMakeFiles/main.dir
+# Target rules for target CMakeFiles/Filehub.dir
 
 # All Build rule for target.
-CMakeFiles/main.dir/all:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/SD/Filehub/build/CMakeFiles --progress-num=1,2,3,4 "Built target main"
-.PHONY : CMakeFiles/main.dir/all
+CMakeFiles/Filehub.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Filehub.dir/build.make CMakeFiles/Filehub.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Filehub.dir/build.make CMakeFiles/Filehub.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/SD/Filehub/build/CMakeFiles --progress-num=1,2,3,4 "Built target Filehub"
+.PHONY : CMakeFiles/Filehub.dir/all
 
 # Build rule for subdir invocation for target.
-CMakeFiles/main.dir/rule: cmake_check_build_system
+CMakeFiles/Filehub.dir/rule: cmake_check_build_system
 	$(CMAKE_COMMAND) -E cmake_progress_start /SD/Filehub/build/CMakeFiles 4
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/main.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/Filehub.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /SD/Filehub/build/CMakeFiles 0
-.PHONY : CMakeFiles/main.dir/rule
+.PHONY : CMakeFiles/Filehub.dir/rule
 
 # Convenience name for target.
-main: CMakeFiles/main.dir/rule
+Filehub: CMakeFiles/Filehub.dir/rule
 
-.PHONY : main
+.PHONY : Filehub
 
 # clean rule for target.
-CMakeFiles/main.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/clean
-.PHONY : CMakeFiles/main.dir/clean
+CMakeFiles/Filehub.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Filehub.dir/build.make CMakeFiles/Filehub.dir/clean
+.PHONY : CMakeFiles/Filehub.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.
