@@ -43,17 +43,25 @@ if(NOT DEFINED CMAKE_OBJDUMP)
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/Filehub" AND
-     NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/Filehub")
+  if(EXISTS "$ENV{DESTDIR}/usr/bin/Filehub" AND
+     NOT IS_SYMLINK "$ENV{DESTDIR}/usr/bin/Filehub")
     file(RPATH_CHECK
-         FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/Filehub"
+         FILE "$ENV{DESTDIR}/usr/bin/Filehub"
          RPATH "")
   endif()
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" TYPE EXECUTABLE FILES "/SD/Filehub/bin/Filehub")
-  if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/Filehub" AND
-     NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/Filehub")
+  list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
+   "/usr/bin/Filehub")
+  if(CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
+    message(WARNING "ABSOLUTE path INSTALL DESTINATION : ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
+  endif()
+  if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
+    message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
+  endif()
+file(INSTALL DESTINATION "/usr/bin" TYPE EXECUTABLE FILES "/SD/Filehub/bin/Filehub")
+  if(EXISTS "$ENV{DESTDIR}/usr/bin/Filehub" AND
+     NOT IS_SYMLINK "$ENV{DESTDIR}/usr/bin/Filehub")
     if(CMAKE_INSTALL_DO_STRIP)
-      execute_process(COMMAND "/bin/x86_64-linux-gnu-strip" "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/Filehub")
+      execute_process(COMMAND "/bin/x86_64-linux-gnu-strip" "$ENV{DESTDIR}/usr/bin/Filehub")
     endif()
   endif()
 endif()

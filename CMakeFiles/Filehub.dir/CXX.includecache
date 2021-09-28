@@ -1,0 +1,40 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/SD/Filehub/src/FileControll/kk.cpp
+FileControll/kk.h
+/SD/Filehub/src/FileControll/FileControll/kk.h
+
+/SD/Filehub/src/UserInputProcess/ArgcArgvProcess.cpp
+UserInputProcess/ArgcArgvProcess.h
+/SD/Filehub/src/UserInputProcess/UserInputProcess/ArgcArgvProcess.h
+
+/SD/Filehub/src/main.cpp
+iostream
+-
+FileControll/kk.h
+/SD/Filehub/src/FileControll/kk.h
+Log/Log.h
+/SD/Filehub/src/Log/Log.h
+UserInputProcess/ArgcArgvProcess.h
+/SD/Filehub/src/UserInputProcess/ArgcArgvProcess.h
+
+include/FileControll/kk.h
+iostream
+-
+
+include/Log/Log.h
+iostream
+-
+ctime
+-
+
+include/UserInputProcess/ArgcArgvProcess.h
+cstdio
+-
+

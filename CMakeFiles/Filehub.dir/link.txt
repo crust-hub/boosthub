@@ -1,1 +1,1 @@
-/usr/bin/c++  -g -std=c++11 -Wall -O2 CMakeFiles/Filehub.dir/src/main.cpp.o CMakeFiles/Filehub.dir/src/UserInputProcess/ArgcArgvProcess.cpp.o CMakeFiles/Filehub.dir/src/FileControll/kk.cpp.o -o "main.cpp;/SD/Filehub/bin/Filehub" 
+/usr/bin/c++  -g -std=c++11 -Wall -O2 CMakeFiles/Filehub.dir/src/main.cpp.o CMakeFiles/Filehub.dir/src/UserInputProcess/ArgcArgvProcess.cpp.o CMakeFiles/Filehub.dir/src/FileControll/kk.cpp.o -o bin/Filehub 

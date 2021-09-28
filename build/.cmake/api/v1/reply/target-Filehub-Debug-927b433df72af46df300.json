@@ -75,7 +75,7 @@
 		[
 			{
 				"backtrace" : 2,
-				"path" : "bin"
+				"path" : "/usr/bin"
 			}
 		],
 		"prefix" : 
