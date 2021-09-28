@@ -34,4 +34,9 @@
 
 Makefile
 build/Makefile
-src/Makefile
+src/Makefile 
+CMakeFiles
+*.cmake
+*.make
+build/*
+bin/*
