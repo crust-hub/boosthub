@@ -34,3 +34,4 @@
 
 Makefile
 build/Makefile
+src/Makefile
