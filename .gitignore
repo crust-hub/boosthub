@@ -43,3 +43,4 @@ bin/
 .vscode/
 *.log
 CMakeCache.txt
+cmake_install.cmake
