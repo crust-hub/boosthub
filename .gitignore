@@ -38,5 +38,7 @@ src/Makefile
 CMakeFiles
 *.cmake
 *.make
-build/*
-bin/*
+build/
+bin/
+.vscode/
+
