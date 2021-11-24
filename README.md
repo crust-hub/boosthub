@@ -1,2 +1,2 @@
-# filehub
-一个面向用户的文件存储，分发的管理工具
+# Boosthub
+Portable Linux file storage and distribution warehouse tool
