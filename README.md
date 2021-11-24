@@ -33,4 +33,5 @@ $ boosthub
 ``` 
 
 ## Using the details  
-`some info...`
+`some info...` 
+
