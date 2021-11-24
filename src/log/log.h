@@ -60,7 +60,7 @@ public:
         check_init();
         char * time=getTime();
         std::cout<<"[Log::info]["<<time<<"] "<<message<<std::endl;
-        fputs( message, log_fd_ );
+        fprintf( log_fd_,"[Log::info][%s] %s\n",time,message);
         delete time;
     }
     /*打印错误*/
@@ -68,7 +68,7 @@ public:
         check_init();
         char * time=getTime();
         std::cout<<"[Log::error]["<<time<<"] "<<message<<std::endl;
-        fputs( message, log_fd_ );
+        fprintf( log_fd_,"[Log::error][%s] %s\n",time,message);
         delete time;
     }
     /*打印警告信息*/
@@ -76,7 +76,7 @@ public:
         check_init();
         char * time=getTime();
         std::cout<<"[Log::warn]["<<time<<"] "<<message<<std::endl;
-        fputs( message, log_fd_ );
+        fprintf( log_fd_,"[Log::warn][%s] %s\n",time,message);
         delete time;
     }
     /*关闭log文件流*/
