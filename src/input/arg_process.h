@@ -13,6 +13,6 @@ public:
     arg_process(int argc,char*** argv);
     int process();
 };
-//用户输入处理
-extern  arg_process*  BOOST_ARG_PROCESS;
+//process user input
+extern  arg_process*  ARG_PROCESS;
 #endif

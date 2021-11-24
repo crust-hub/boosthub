@@ -20,4 +20,4 @@ int arg_process::process(){
     return this->DOWNLOADFILE;
 }
 
-arg_process*  BOOST_ARG_PROCESS=new arg_process();
+arg_process*  ARG_PROCESS=new arg_process();

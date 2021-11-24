@@ -1,1 +1,1 @@
-/usr/local/bin/Filehub
+/usr/bin/boosthub

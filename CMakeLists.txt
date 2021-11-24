@@ -5,15 +5,15 @@ SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -Wall -O2")
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -std=c++11 -Wall -O2")
 
 
-#添加头文件的查找目录 && 在编译参数"-l" ，指定搜索头文件的路径
 #INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/include)
 INCLUDE_DIRECTORIES(${OpenCV_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/src)
 
 
-add_subdirectory(${PROJECT_SOURCE_DIR}/src)
+#add_subdirectory(${PROJECT_SOURCE_DIR}/src)
 
-#EXECUTABLE_OUTPUT_PATH && LIBRARY_OUTPUT_PATH用来指定二进制文件位置和库文件路径，这里不包括中间文件
+#EXECUTABLE_OUTPUT_PATH && LIBRARY_OUTPUT_PATH 
+#Specifies the binary file location and library file path. Intermediate files are not included  
 SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 
 FILE(GLOB_RECURSE SOURCE_FILES "${PROJECT_SOURCE_DIR}/src/*.cpp")
