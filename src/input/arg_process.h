@@ -13,6 +13,4 @@ public:
     arg_process(int argc,char*** argv);
     int process();
 };
-//process user input
-extern  arg_process*  ARG_PROCESS;
 #endif

@@ -19,5 +19,3 @@ int arg_process::process(){
     }
     return this->DOWNLOADFILE;
 }
-
-arg_process*  ARG_PROCESS=new arg_process();
