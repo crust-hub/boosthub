@@ -7,6 +7,7 @@
 #include"../entity/file.h"
 #include"../entity/folder.h" 
 #include"../net/boost_socket.h"
+#include"../input/boost_shell.h"
 #include <pthread.h>
 
 void* socket_process_thread(void*client_socket);

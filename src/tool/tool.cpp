@@ -20,14 +20,16 @@ void* socket_process_thread(void* client_socket){
     char buffer[512]={0};
     size_t len=0;
     tool_bucket TOOL;
-    
+    boost_shell SHELL;
+    SHELL.set_socket_fd(client_socket_id);
     while(1){
        len=recv(client_socket_id,buffer,sizeof(buffer),0);
        if(len<=0){
-	  close(client_socket_id);
-       	  break;
+	        close(client_socket_id);
+       	    break;
        }
-       printf("%s\n",buffer);
+       buffer[len]='\0';
+       SHELL.run(std::string(buffer));
     }
     
     TOOL.BOOST_LOG->close();
