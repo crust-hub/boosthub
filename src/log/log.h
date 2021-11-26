@@ -11,7 +11,6 @@
 #include <fstream>
 #include "../file/file_operator.h"
 
-
 /*feature:
 Reconstruct the log class into reusable multi file oriented
 */

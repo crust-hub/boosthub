@@ -8,9 +8,9 @@
 #include <sys/stat.h>
 #include <dirent.h>
 #include <string.h>
-#include<vector>
-#include<string>
-#include"../entity/file.h"
+#include <vector>
+#include <string>
+#include "../entity/folder.h"
 class file_operator{
 public:
     file_operator();
@@ -27,7 +27,7 @@ public:
     /*create folder*/
     int create_dir(const char* path_name,mode_t mode);
     /*read folder*/
-    std::vector<file> read_folder(const char* path_name);
+    folder read_folder(const char* path_name);
     /*delete dir
       info:The folder must be empty before deleting it
     */

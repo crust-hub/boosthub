@@ -32,8 +32,8 @@ int file_operator::create_dir(const char* path_name,mode_t mode){
     return mkdir(path_name,mode);
 }
 /*read folder*/
-std::vector<file> file_operator::read_folder(const char* path_name){
-    std::vector<file> result;
+folder file_operator::read_folder(const char* path_name){
+    std::vector<file> list;
     DIR* dp=opendir(path_name);
     struct dirent *d;
     while((d=readdir(dp))!=NULL){
@@ -42,8 +42,12 @@ std::vector<file> file_operator::read_folder(const char* path_name){
       finded.fd=d->d_ino;
       finded.name=std::string(d->d_name);
       finded.type=d->d_type==4?'d':'f';
-      result.push_back(finded);
+      list.push_back(finded);
     }
+    folder result;
+    result.name=std::string(path_name);
+    result.path=std::string(path_name);
+    result.set_list(list);
     closedir(dp);
     return result;
 }
