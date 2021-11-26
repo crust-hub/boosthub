@@ -1,9 +1,8 @@
 #include<iostream>
 #include"./tool/tool.h"
 using namespace std;
-/*tool bucket*/
-tool_bucket* TOOL=new tool_bucket();
 int main(int argc,char**argv){
+    tool_bucket* TOOL=new tool_bucket();
     TOOL->BOOST_LOG->info("hello");
     TOOL->BOOST_LOG->error("出现未知错误");
     TOOL->BOOST_LOG->warn("警告");
@@ -17,14 +16,15 @@ int main(int argc,char**argv){
     for(int i=0;i<files.size();i++){
         std::cout<<files[i]<<std::endl;
     }
-
-
     folder boostHubLogs=finded_folder.enter_subfolder("boostHubLogs");
     std::cout<<"Path: "<<boostHubLogs.path<<" File Sum: "<<boostHubLogs.get_list().size()<<std::endl;
     for(int i=0;i<boostHubLogs.get_list().size();i++){
         std::cout<<boostHubLogs.get_list()[i]<<std::endl;
     }
-
     delete TOOL;
+    
+    /*net service*/
+    boost_socket socket;//创建套接字
+    socket.service_start();//开始网络对外服务
     return 0;
 }
