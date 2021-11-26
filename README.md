@@ -1,5 +1,13 @@
 
+<div align="center">  
 
+[![Contributors][contributors-shield]][contributors-url]
+[![Forks][forks-shield]][forks-url]
+[![Stargazers][stars-shield]][stars-url]
+[![Issues][issues-shield]][issues-url]
+[![MIT License][license-shield]][license-url]
+
+</div>  
 
 <!-- PROJECT LOGO -->
 <br />
@@ -15,24 +23,16 @@
   </p>
 </div> 
 
-<div align="center">  
 
-[![Contributors][contributors-shield]][contributors-url]
-[![Forks][forks-shield]][forks-url]
-[![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
-[![MIT License][license-shield]][license-url]
 
-</div>  
 
---- 
 
 ## Brief Introduction  
 Using Boosthub you can store your file repository on the server side, and you can operate the repository on the client side.    
 
 Boosthub is an extremely simple application that doesn't require other Linux applications to rely on . 
  
---- 
+
 
 ## Quick Start 
 ###  1. Prepare  
@@ -62,7 +62,7 @@ Install the project...
 $ boosthub -h
 ``` 
 
----
+
 
 
 ## Using the details  
@@ -82,41 +82,41 @@ Fd: 83461 Name: safe Type:d
 Fd: 83462 Name: boosthub Type:d 
 ```
 
----
+
 
 ## Why Boosthub? 
 ### `Why not use FTP?`
 
-```code
+
 You of course take advantage of FTP tools, this is just a personal little project, built for the fun of coding. With FTP it has huge disadvantages, but I also want to use my own ideas to make their own satisfactory tools.
-```  
+ 
 ### `Network protocol `
 
-```code
-Custom communication protocols over TCP/IP. Custom communication protocols on top of TCP/IP, showcasing does not guarantee your data security, but will certainly do its best.
-```
-### `Easy to deploy` 
-```code
-Users without experience in program development and shell commands can also quickly deploy and run on the server and operate on their file repositories with remote clients.
-```
-### `Just to be clear`  
-```code
-It's more like a useful, useless little toy that can also be used when needed.
-```
 
----
+Custom communication protocols over TCP/IP. Custom communication protocols on top of TCP/IP, showcasing does not guarantee your data security, but will certainly do its best.
+
+### `Easy to deploy` 
+
+Users without experience in program development and shell commands can also quickly deploy and run on the server and operate on their file repositories with remote clients.
+
+### `Just to be clear`  
+
+It's more like a useful, useless little toy that can also be used when needed.
+
+
+
 
 ## Developers  
 
 This project is being maintained by only one person, if you can give suggestions or submit your code to make the project better. I would appreciate it.   
 
----
+
 
 ## Contact us for suggestions  
 Email heizuboriyo@gmail.com  
 It is developed and maintained in  `Guilin University of Electronic Technology`, China  
 
----
+
 
 ## Versions  
 
