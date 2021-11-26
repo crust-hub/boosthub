@@ -44,7 +44,6 @@ $ sudo apt install glibc-doc manpages-posix-dev
 
 ### 2. Get Boosthub
 ```shell 
-$ git clone https://github.com/gaowanlu/boosthub.git 
 $ cd ./boosthub 
 $ cmake . 
 $ make 
