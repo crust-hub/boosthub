@@ -15,7 +15,6 @@ void boost_shell::run(std::string shell){
     if(this->USER.get_socket_fd()==-1){
         return;
     }
-    std::cout<<"Shell From Client : "<<shell<<std::endl;
     /*对命令行进行解析*/
     if(shell.size()>0){
         patch(shell);
@@ -28,7 +27,6 @@ void boost_shell::set_socket_fd(int socket_fd){
 
 void boost_shell::patch(std::string&shell){
     /*命令行模式匹配*/
-    std::cout<<"Shell Patch : "<<shell<<std::endl;
     if(shell=="ls"){
         ls();
     }
@@ -43,13 +41,17 @@ void boost_shell::ls(){
     folder finded_folder=FILE_TOOL.read_folder(this->USER.get_now_path().c_str());
     std::vector<file> files=finded_folder.get_list();
     char buffer[512]={0};
-    sprintf(buffer,"\nFolder Path: %s File Sum: %ld \n\0",finded_folder.path.c_str(),files.size());
 
-    /*向客户端发送数据*/
-    int socket_fd=this->USER.get_socket_fd();//获得用户套接字
+    int socket_fd=this->USER.get_socket_fd();//获得用户套接字    
+    /*头部信息*/
+    sprintf(buffer,"\nFolder Path: %s File Sum: %ld \n\0",finded_folder.path.c_str(),files.size());
     write(socket_fd,buffer,strlen(buffer));
+    sprintf(buffer,"\n%-16s\t%-16s\t%-16s\n\0","Fd","Name","Type");
+    write(socket_fd,buffer,strlen(buffer));
+
+    /*目录遍历*/
     for(int i=0;i<files.size();i++){
-        sprintf(buffer,"Fd: %d Name: %s Type:%c \n\0",files[i].fd,files[i].name.c_str(),files[i].type);
+        sprintf(buffer,"%-16d\t%-16s\t%-16c\n\0",files[i].fd,files[i].name.c_str(),files[i].type);
         write(socket_fd,buffer,strlen(buffer));
     }
     write(socket_fd,">>",strlen(">>"));

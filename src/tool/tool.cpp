@@ -12,9 +12,10 @@ tool_bucket::~tool_bucket(){
 
 
 void* socket_process_thread(void* client_socket){
+    printf("Event: new client thread start\n");
     int client_socket_id=*(int*)client_socket;
     free(client_socket);
-    std::cout<<"开启socket处理线程 client_socket "<<client_socket_id<<"\n";
+    //std::cout<<"开启socket处理线程 client_socket "<<client_socket_id<<"\n";
     //每次接收到请求都因该开辟新的线程 对其做出处理 包括接收数据与发送数据
     //读取内容
     char buffer[512]={0};
@@ -33,7 +34,7 @@ void* socket_process_thread(void* client_socket){
     }
     
     TOOL.BOOST_LOG->close();
-    printf("\n");
+    printf("Event: client disconnect\n");
     //断开连接
     shutdown(client_socket_id,SHUT_WR);
     close(client_socket_id);
