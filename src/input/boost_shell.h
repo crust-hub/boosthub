@@ -1,3 +1,4 @@
+#pragma once
 #ifndef __BOOST_SHELL__
 #define __BOOST_SHELL__
 #include<string>

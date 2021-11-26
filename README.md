@@ -83,7 +83,6 @@ Fd: 83462 Name: boosthub Type:d
 ```
 
 
-
 ## Why Boosthub? 
 ### `Why not use FTP?`
 
@@ -103,8 +102,21 @@ Users without experience in program development and shell commands can also quic
 
 It's more like a useful, useless little toy that can also be used when needed.
 
+---
 
+## The project structure  
 
+    src (Source code)
+    ├── entity (Entity object class)
+    ├── file (File related operations)
+    ├── input (Processing user input)
+    ├── log (Logging tools)
+    ├── tool (Tool inheritance encapsulation) 
+    ├── net (Network control layer)  
+    ├── protocol (Communication protocol)  
+    └── main.cpp 
+
+---
 
 ## Developers  
 

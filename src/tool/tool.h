@@ -1,3 +1,4 @@
+#pragma once
 #ifndef __TOOL_H__
 #define __TOOL_H__
 #include"../file/file_operator.h"

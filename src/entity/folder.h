@@ -1,3 +1,4 @@
+#pragma once
 #ifndef __FOLDER_H__
 #define __FOLDER_H__
 #include<iostream>

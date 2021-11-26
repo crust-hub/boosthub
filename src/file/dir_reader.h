@@ -1,3 +1,4 @@
+#pragma once
 #ifndef __DIR_READER_H__
 #define __DIR_READER_H__
 #include <iostream>

@@ -1,3 +1,4 @@
+#pragma once
 #ifndef __FILE_OPERATOR_H__
 #define __FILE_OPERATOR_H__
 #include <sys/types.h>

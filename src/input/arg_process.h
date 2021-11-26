@@ -1,3 +1,4 @@
+#pragma once
 #ifndef __ARG_PROCESS_H__
 #define __ARG_PROCESS_H__
 #include<cstdio>

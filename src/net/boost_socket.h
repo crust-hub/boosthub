@@ -1,3 +1,4 @@
+#pragma once
 #ifndef __BOOST_SOCKET_H__
 #define __BOOST_SOCKET_H__
 #include<stdio.h>
