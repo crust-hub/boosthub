@@ -17,18 +17,21 @@ boost_socket::boost_socket(){
     //将本机信息绑定到套接字
     bind(server_socket_id,(struct sockaddr*)&this->server_address,sizeof(this->server_address));
     //开始监听端口
-    listen(server_socket_id,20);
+    if(-1==listen(server_socket_id,20)){
+	printf("端口监听失败");
+    	exit(-1);
+    }
 }
 
 void boost_socket::service_start(){
     socklen_t client_address_size=sizeof(this->client_address);
     while(1){
-        memset(&this->client_address,0,sizeof(this->client_address));
+        memset(&(this->client_address),0,sizeof(this->client_address));
         int client_socket_id=accept(server_socket_id,
-                                (struct sockaddr*)&this->client_address,
+                                (struct sockaddr*)&(this->client_address),
                                 &client_address_size);
-        if(client_socket_id!=-1){
-            std::cout<<"接收请求\n";
+        if(client_socket_id>=0){
+            std::cout<<"接收请求"<<client_socket_id<<"\n";
             new_socket_process_thread(client_socket_id);
         }else{
             std::cout<<"accept 返回 -1\n";
@@ -36,6 +39,7 @@ void boost_socket::service_start(){
         }
     }
 }
+
 boost_socket::~boost_socket(){
     close(server_socket_id);//关闭本机套接字
 }
