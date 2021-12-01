@@ -51,6 +51,20 @@ folder file_operator::read_folder(const char* path_name){
     closedir(dp);
     return result;
 }
+
+/*检查文件夹是否存在*/
+bool file_operator::check_folder_path_real(const char* path){
+    DIR* dp=NULL;
+    dp=opendir(path);
+    if(dp!=NULL){
+        /*查看问价夹信息*/
+        closedir(dp);
+        return true;
+    }
+    return false;
+}
+
+
 /*delete dir
   info:The folder must be empty before deleting it
 */

@@ -29,6 +29,8 @@ public:
     int create_dir(const char* path_name,mode_t mode);
     /*read folder*/
     folder read_folder(const char* path_name);
+    /*检查文件夹是否存在*/
+    bool check_folder_path_real(const char* path);
     /*delete dir
       info:The folder must be empty before deleting it
     */

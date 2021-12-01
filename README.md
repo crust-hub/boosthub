@@ -27,7 +27,7 @@
 
 
 
-## Brief Introduction  
+## Introduction  
 Using Boosthub you can store your file repository on the server side, and you can operate the repository on the client side.    
 
 Boosthub is an extremely simple application that doesn't require other Linux applications to rely on . 
@@ -35,14 +35,14 @@ Boosthub is an extremely simple application that doesn't require other Linux app
 
 
 ## Quick Start 
-###  1. Prepare  
+###  Ⅰ.Prepare  
 ```  
 $ sudo apt update 
 $ sudo apt install g++ gcc make cmake git 
 $ sudo apt install glibc-doc manpages-posix-dev 
 ``` 
 
-### 2. Get Boosthub
+### Ⅱ.Get Boosthub
 ```shell 
 $ cd ./boosthub 
 $ cmake . 
@@ -56,31 +56,76 @@ Install the project...
 -- Install configuration: ""
 -- Installing: /usr/bin/boosthub
 ```
-### 3. Use Boosthub 
+### Ⅲ.Use Boosthub ()
 ```
-$ boosthub -h
+$ boosthub -h 
+Disclaimer: no client can use it at present. 
+It can only be connected through socket. Developers are crazy about adding this function.
 ``` 
 
 
 
 
-## Using the details  
-### `$ls`  
-> View the file and directory information under the location  
-
+## Boosthub shell  
+### `>> ls`  
+`View the file and directory information under the location`  
 
 ```shell
-$ boosthub ls
+>> ls
 ```
 ```shell
-Folder Path: / File Sum: 26 
+Now Path: /     This Path Inner Sum: 26 
 Fd: 83406 Name: . Type:d 
 Fd: 83406 Name: .. Type:d 
 Fd: 83460 Name: hub Type:d 
 Fd: 83461 Name: safe Type:d 
 Fd: 83462 Name: boosthub Type:d 
-```
+```  
 
+### `>> cd [path]` 
+`Switch the current path` 
+
+```shell  
+>> cd /var
+
+Now Path: /var  
+
+>> cd ./www
+
+Now Path: /var/www  
+
+>> ls
+
+Now Path: /var/www     This Path Inner Sum: 3 
+Fd              	Name            	Type            
+762671          	.               	d               
+762671          	..              	d               
+762672          	html            	d               
+
+>>cd ./html
+
+Now Path: /var/www/html  
+
+>> ls
+
+Now Path: /var/www/html     This Path Inner Sum: 2 
+
+Fd              	Name            	Type            
+762672          	.               	d               
+762672          	..              	d               
+>>
+``` 
+
+### `>> pwd` 
+`View the path at this time`  
+```shell 
+>> cd /var/www
+Now Path: /var/www  
+>> cd ../
+Now Path: /var  
+>> pwd
+Now Path: /var 
+```
 
 ## Why Boosthub? 
 ### `Why not use FTP?`
