@@ -44,5 +44,9 @@ public:
     readlink("/proc/self/exe", arr_tmp, len)
     */
     ssize_t get_exe_path(char*buf);
+    /*尝试打开文件*/
+    FILE *open_file(std::string path, const char *mode);
+    /*关闭文件*/
+    void close_file(FILE *file);
 };
 #endif

@@ -82,7 +82,7 @@ Fd: 83461 Name: safe Type:d
 Fd: 83462 Name: boosthub Type:d 
 ```  
 
-### `>> cd [path]` 
+### `>> cd [Folder path]` 
 `Switch the current path` 
 
 ```shell  
@@ -125,26 +125,43 @@ Now Path: /var/www
 Now Path: /var  
 >> pwd
 Now Path: /var 
+``` 
+
+### `>> get [File path]` 
+`Gets the byte stream of the specified file` 
+```shell 
+>> ls
+Now Path: /mnt/c/slago/build/static/js     This Path Inner Sum: 3 
+
+Fd              	Name            	Type            
+1339378         	.               	d               
+1339378         	..              	d               
+1339413         	hello.js	        f               
+
+>> get ./hello.js  
+
+console.log("Hello Boosthub"); 
 ```
 
 ## Why Boosthub? 
-### `Why not use FTP?`
+### `Why not use FTP?` 
 
 
-You of course take advantage of FTP tools, this is just a personal little project, built for the fun of coding. With FTP it has huge disadvantages, but I also want to use my own ideas to make their own satisfactory tools.
+》Of course, you can use the FTP tool, which is just a small personal project built for the fun of coding. It has great shortcomings, but I also want to use my own ideas to make my own satisfactory tools.  
+》So, we just think of it as an interesting little toy.
  
 ### `Network protocol `
 
 
-Custom communication protocols over TCP/IP. Custom communication protocols on top of TCP/IP, showcasing does not guarantee your data security, but will certainly do its best.
+》Custom communication protocols over TCP/IP. Custom communication protocols on top of TCP/IP, showcasing does not guarantee your data security, but will certainly do its best.
 
 ### `Easy to deploy` 
 
-Users without experience in program development and shell commands can also quickly deploy and run on the server and operate on their file repositories with remote clients.
+》Users without experience in program development and shell commands can also quickly deploy and run on the server and operate on their file repositories with remote clients.
 
 ### `Just to be clear`  
 
-It's more like a useful, useless little toy that can also be used when needed.
+》It's more like a useful, useless little toy that can also be used when needed.
 
 ---
 

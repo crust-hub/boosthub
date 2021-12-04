@@ -34,40 +34,31 @@ void boost_shell::set_socket_fd(int socket_fd)
 
 void boost_shell::patch(std::string &shell)
 {
-    std::vector<std::string> words=word_split(shell);
+    std::vector<std::string> words = word_split(shell);
     /*命令行模式匹配*/
+    /******************** ls 命令 **********************/
     if (check_ls(words))
     {
-        ls();
-    }else if(check_cd(words)){
-        /*执行cd逻辑判断 获取要cd的绝对路径*/
-        std::string concat_path=this->USER.get_now_path()+"/"+words[1];
-        if(words[1][0]=='/'){//用户输入绝对路径
-            concat_path=words[1];
-        }
-        char* real_new_path=realpath(concat_path.c_str(),NULL);
-        std::cout<<"拼接后的路径 "<<concat_path<<std::endl;
-        std::string new_path=std::string("/");
-        if(real_new_path!=NULL){
-            new_path=std::string(real_new_path);//新路径
-            delete real_new_path;
-            real_new_path=NULL;
-        }
-        //检查是否为根路径
-        //检查是否返回上级(涉及到多级问题，可能要先进行获取DIR然后文件夹存在 则使用文件夹的真实绝对路径)
-        std::cout<<"cd命令 新路径为: "<<new_path<<std::endl;
-        //检查文件夹是否存在
-        if(FILE_TOOL.check_folder_path_real(new_path.c_str())){
-            this->USER.set_nowpath(new_path);
-            std::cout<<"文件夹存在\n";
-            this->cd();
-        }else{
-            std::cout<<"文件夹不存在\n";
-        }
-    }else if(check_pwd(words)){
+        /******************** cd 命令 **********************/
+    }
+    else if (check_cd(words))
+    {
 
-    }else{
-        send_illegal();//告诉用户它的指令是非法的
+        /******************** pwd 命令 **********************/
+    }
+    else if (check_pwd(words))
+    {
+
+        /******************** get 命令 **********************/
+    }
+    else if (check_get(words))
+    {
+
+        /******************** not finded 命令 **********************/
+    }
+    else
+    {
+        send_illegal(); //告诉用户它的指令是非法的
     }
 }
 
@@ -97,32 +88,54 @@ void boost_shell::ls()
 }
 
 /*cd命令*/
-void boost_shell::cd(){
-    char buffer[512] = {0};
-    int socket_fd = this->USER.get_socket_fd(); //获得用户套接字
-    /*头部信息*/
-    sprintf(buffer, "\nNow Path: %s  \n\0", this->USER.get_now_path().c_str());
-    write(socket_fd, buffer, strlen(buffer));
+void boost_shell::cd(std::vector<std::string> &words)
+{
+    std::string new_path = get_target_path(words[1]);
+    //检查是否为根路径
+    //检查是否返回上级(涉及到多级问题，可能要先进行获取DIR然后文件夹存在 则使用文件夹的真实绝对路径)
+    std::cout << "cd命令 新路径为: " << new_path << std::endl;
+    //检查文件夹是否存在
+    if (FILE_TOOL.check_folder_path_real(new_path.c_str()))
+    {
+        this->USER.set_nowpath(new_path);
+        std::cout << "文件夹存在\n";
+        char buffer[512] = {0};
+        int socket_fd = this->USER.get_socket_fd(); //获得用户套接字
+        /*头部信息*/
+        sprintf(buffer, "\nNow Path: %s  \n\0", this->USER.get_now_path().c_str());
+        write(socket_fd, buffer, strlen(buffer));
+    }
+    else
+    {
+        std::cout << "文件夹不存在\n";
+    }
 }
 
-
 //检查是否为cd命令
-bool boost_shell::check_cd(std::vector<std::string>& words)
+bool boost_shell::check_cd(std::vector<std::string> &words)
 {
-    if(2!=words.size()){
+    if (2 != words.size())
+    {
         return false;
     }
-    if(words[0]!="cd"){
+    if (words[0] != "cd")
+    {
         return false;
     }
-    //check path
+    cd(words);
+    // check path
     return true;
 }
 
 //检查是否为ls命令
-bool boost_shell::check_ls(std::vector<std::string>& words)
+bool boost_shell::check_ls(std::vector<std::string> &words)
 {
-    return 1==words.size()&&words[0]=="ls";
+    bool result = (1 == words.size() && words[0] == "ls");
+    if (result)
+    {
+        ls();
+    }
+    return result;
 }
 
 std::string &boost_shell::string_trim(std::string &s)
@@ -137,46 +150,56 @@ std::string &boost_shell::string_trim(std::string &s)
 }
 
 //分割字符串并将其如"cd /fdcd/edw/gbf" => string[]={"cd","/fd/edw/gbf"}
-std::vector<std::string> boost_shell::word_split(std::string&s){
-    s=string_trim(s);
+std::vector<std::string> boost_shell::word_split(std::string &s)
+{
+    s = string_trim(s);
     std::vector<std::string> result;
-    if(s.empty()){
+    if (s.empty())
+    {
         return result;
     }
-    //split by " "
-    std::string word="";
-    for(long i=0;i<s.size();i++){
-        if(word==""&&s[i]==' '){
+    // split by " "
+    std::string word = "";
+    for (long i = 0; i < s.size(); i++)
+    {
+        if (word == "" && s[i] == ' ')
+        {
             continue;
         }
-        if(word!=""&&s[i]==' '){
+        if (word != "" && s[i] == ' ')
+        {
             result.push_back(word);
-            word="";
+            word = "";
             continue;
         }
-        if(word!=""&&i==s.size()-1){
-            word=word+s[i];
+        if (word != "" && i == s.size() - 1)
+        {
+            word = word + s[i];
             result.push_back(word);
             continue;
         }
-        word=word+s[i];
+        word = word + s[i];
     }
-/*
-    for(long i=0;i<result.size();i++){
-        std::cout<<"word"<<i<<" :"<<result[i]<<std::endl; 
-    }*/
+    /*
+        for(long i=0;i<result.size();i++){
+            std::cout<<"word"<<i<<" :"<<result[i]<<std::endl;
+        }*/
     return result;
 }
 
 //检查是否为pwd命令
-bool boost_shell::check_pwd(std::vector<std::string>& words){
-    if(words.empty()){
+bool boost_shell::check_pwd(std::vector<std::string> &words)
+{
+    if (words.empty())
+    {
         return false;
     }
-    if(words.size()!=1){
+    if (words.size() != 1)
+    {
         return false;
     }
-    if(words[0]=="pwd"){
+    if (words[0] == "pwd")
+    {
         char buffer[512] = {0};
         int socket_fd = this->USER.get_socket_fd(); //获得用户套接字
         /*头部信息*/
@@ -187,9 +210,67 @@ bool boost_shell::check_pwd(std::vector<std::string>& words){
     return false;
 }
 
-//send "Illegal command. Please check your input information"
-void boost_shell::send_illegal(){
+// send "Illegal command. Please check your input information"
+void boost_shell::send_illegal()
+{
     int socket_fd = this->USER.get_socket_fd(); //获得用户套接字
-    const char* message="Illegal command. Please check your input information\n\0";
-    write(socket_fd,message, strlen(message));
+    const char *message = "Illegal command. Please check your input information\n\0";
+    write(socket_fd, message, strlen(message));
+}
+
+//检查是否为get命令
+bool boost_shell::check_get(std::vector<std::string> &words)
+{
+    if (words.empty() || 2 != words.size())
+    {
+        return false;
+    }
+    if (words[0] != "get")
+    {
+        return false;
+    }
+    //进行文件定位
+    std::string target_path = get_target_path(words[1]);
+    //打开文件
+    FILE *target_file = FILE_TOOL.open_file(target_path, "r");
+    if (target_file)
+    {
+        //打开文件成功,通过用户套接字发送给用户
+        //定义缓冲区
+        char buffer[512] = {0};
+        size_t count;
+        while ((count = fread(buffer, 1, 512, target_file)) > 0)
+        {
+            write(this->USER.get_socket_fd(), buffer, count);
+        }
+        //发送完毕
+        FILE_TOOL.close_file(target_file);
+    }
+    else
+    { //打开文件失败
+        std::string error_message = "打开文件失败 "+target_path+"\n";
+        LOG_TOOL.error(error_message.c_str());
+    }
+    return true;
+}
+
+//根据用户指定路径 获得绝对路径
+std::string boost_shell::get_target_path(std::string &path)
+{
+    /*执行cd逻辑判断 获取要cd的绝对路径*/
+    std::string concat_path = this->USER.get_now_path() + "/" + path;
+    if (path[0] == '/')
+    { //用户输入绝对路径
+        concat_path = path;
+    }
+    char *real_new_path = realpath(concat_path.c_str(), NULL);
+    std::cout << "拼接后的路径 " << concat_path << std::endl;
+    std::string new_path = std::string("/");
+    if (real_new_path != NULL)
+    {
+        new_path = std::string(real_new_path); //新路径
+        delete real_new_path;
+        real_new_path = NULL;
+    }
+    return new_path;
 }

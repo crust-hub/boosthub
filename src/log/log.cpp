@@ -60,3 +60,7 @@ void boost_log::close(){
     }
     log_fd_=NULL;
 }
+
+boost_log::~boost_log(){
+    this->close();
+}

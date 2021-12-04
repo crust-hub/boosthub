@@ -46,5 +46,6 @@ public:
     void warn(const char* message);
     /*close log file*/
     void close();
+    ~boost_log();
 };
 #endif
