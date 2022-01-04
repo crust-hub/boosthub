@@ -202,6 +202,7 @@ It is developed and maintained in  `Guilin University of Electronic Technology`,
 
 |  version   |  date  | changed content |  
 |  ----  | ----  |----|  
-| [v0.0.1]( )  | 2021/11/26 | Network communication, directory reading, log tools, etc |  
+| [v0.0.1](https://github.com/gaowanlu/boosthub/releases/tag/v0.0.1)  | 2021/11/26 | Network communication, directory reading, log tools, etc |  
+| [v0.1.1](https://github.com/gaowanlu/boosthub/releases/tag/v0.1.1)  | 2022/1/4 | Client send shell command and print response on console. setting ip and port for client and server service |  
 
 
