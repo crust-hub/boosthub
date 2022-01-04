@@ -48,6 +48,7 @@ void *socket_process_thread(void *client_socket)
             break;
         }
         buffer[len] = '\0';
+        printf("READE : %s\n", buffer);
         SHELL.run(std::string(buffer));
     }
 

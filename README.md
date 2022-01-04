@@ -34,7 +34,7 @@ Boosthub is an extremely simple application that doesn't require other Linux app
 
 ## Framework Base  
 
-<div style="text-align:center;">
+<div align="center">
 
 ![framework base](./images/3835BCB193E583DBC3CEE458262128A2.png)  
 
@@ -53,6 +53,7 @@ $ sudo apt install glibc-doc manpages-posix-dev
 
 ### Ⅱ.Get Boosthub
 ```shell 
+$ git clone https://github.com/gaowanlu/boosthub.git  
 $ cd ./boosthub 
 $ cmake . 
 $ make 
@@ -67,9 +68,16 @@ Install the project...
 ```
 ### Ⅲ.Use Boosthub ()
 ```
-$ boosthub -h 
+$ boosthub --help  
 Disclaimer: no client can use it at present. 
-It can only be connected through socket. Developers are crazy about adding this function.
+It can only be connected through socket. Developers are crazy about adding this function.  
+
+$ boosthub --server 0.0.0.0 1234  
+Start the server-side boothub service  
+
+$ boosthub --shell 127.0.0.1 1234  
+Client shell connection server  
+
 ``` 
 
 

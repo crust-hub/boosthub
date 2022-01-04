@@ -5,6 +5,8 @@
 #include <iostream>
 #include <string.h>
 #include "../net/boost_socket.h"
+#include "../client/boosthub_client.h"
+
 // arg处理
 class arg_process
 {
