@@ -2,7 +2,9 @@
 #ifndef __ARG_PROCESS_H__
 #define __ARG_PROCESS_H__
 #include <cstdio>
-
+#include <iostream>
+#include <string.h>
+#include "../net/boost_socket.h"
 // arg处理
 class arg_process
 {
@@ -17,5 +19,8 @@ public:
     arg_process();
     arg_process(int argc, char ***argv);
     int process();
+
+public:
+    void result_none();
 };
 #endif

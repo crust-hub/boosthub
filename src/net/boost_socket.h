@@ -20,7 +20,7 @@ private:
     struct sockaddr_in client_address;
 
 public:
-    boost_socket();
+    boost_socket(char *ip, char *port);
     ~boost_socket();
     void service_start();
 };

@@ -30,7 +30,16 @@
 ## Introduction  
 Using Boosthub you can store your file repository on the server side, and you can operate the repository on the client side.    
 
-Boosthub is an extremely simple application that doesn't require other Linux applications to rely on . 
+Boosthub is an extremely simple application that doesn't require other Linux applications to rely on .  
+
+## Framework Base  
+
+<div style="text-align:center;">
+
+![framework base](./images/3835BCB193E583DBC3CEE458262128A2.png)  
+
+</div>
+
  
 
 

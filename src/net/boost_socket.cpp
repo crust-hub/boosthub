@@ -1,11 +1,14 @@
 #include "boost_socket.h"
 #include <iostream>
 #include "../tool/tool.h"
+
 /**
  * @brief Construct a new boost socket::boost socket object
  *
+ * @param ip 监听ip地址
+ * @param port 监听端口
  */
-boost_socket::boost_socket()
+boost_socket::boost_socket(char *ip, char *port)
 {
     //创建TCP本机套接字
     server_socket_id = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
@@ -18,14 +21,16 @@ boost_socket::boost_socket()
     memset(&this->server_address, 0, sizeof(this->server_address));
     memset(&this->client_address, 0, sizeof(this->client_address));
     this->server_address.sin_family = AF_INET;
-    this->server_address.sin_addr.s_addr = inet_addr("0.0.0.0");
-    this->server_address.sin_port = htons(1234); // server port
+    this->server_address.sin_addr.s_addr = inet_addr(ip);
+    int port_num = 1234;
+    sscanf(port, "%d", &port_num);                   //将端口字符串转换为整数端口
+    this->server_address.sin_port = htons(port_num); // server port
     //将本机信息绑定到套接字
     bind(server_socket_id, (struct sockaddr *)&this->server_address, sizeof(this->server_address));
     //开始监听端口
     if (-1 == listen(server_socket_id, 20))
     {
-        printf("端口监听失败");
+        printf("端口监听失败 Ip Error Or Port Error");
         exit(-1);
     }
 }
