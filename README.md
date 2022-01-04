@@ -1,14 +1,3 @@
-
-<div align="center">  
-
-[![Contributors][contributors-shield]][contributors-url]
-[![Forks][forks-shield]][forks-url]
-[![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
-[![MIT License][license-shield]][license-url]
-
-</div>  
-
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
@@ -66,7 +55,7 @@ Install the project...
 -- Install configuration: ""
 -- Installing: /usr/bin/boosthub
 ```
-### Ⅲ.Use Boosthub ()
+### Ⅲ.Use Boosthub  
 ```
 $ boosthub --help  
 Disclaimer: no client can use it at present. 
@@ -185,14 +174,15 @@ console.log("Hello Boosthub");
 ## The project structure  
 
     src (Source code)
-    ├── entity (Entity object class)
-    ├── file (File related operations)
-    ├── input (Processing user input)
-    ├── log (Logging tools)
-    ├── tool (Tool inheritance encapsulation) 
+    ├── client (Client shell service)  
+    ├── entity (Entity object class)  
+    ├── file (File related operations)  
+    ├── input (Processing user input)  
+    ├── log (Logging tools)  
+    ├── tool (Tool inheritance encapsulation)  
     ├── net (Network control layer)  
     ├── protocol (Communication protocol)  
-    └── main.cpp 
+    └── main.cpp   
 
 ---
 
@@ -215,16 +205,3 @@ It is developed and maintained in  `Guilin University of Electronic Technology`,
 | [v0.0.1]( )  | 2021/11/26 | Network communication, directory reading, log tools, etc |  
 
 
-
-<!-- MARKDOWN LINKS & IMAGES -->
-<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/gaowanlu/boosthub.svg?style=for-the-badge
-[contributors-url]: https://github.com/gaowanlu/boosthub/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/gaowanlu/boosthub.svg?style=for-the-badge
-[forks-url]: https://github.com/gaowanlu/boosthub/network/members
-[stars-shield]: https://img.shields.io/github/stars/gaowanlu/boosthub.svg?style=for-the-badge
-[stars-url]: https://github.com/gaowanlu/boosthub/stargazers
-[issues-shield]: https://img.shields.io/github/issues/gaowanlu/boosthub.svg?style=for-the-badge
-[issues-url]: https://github.com/gaowanlu/boosthub/issues
-[license-shield]: https://img.shields.io/github/license/gaowanlu/boosthub.svg?style=for-the-badge
-[license-url]: https://github.com/gaowanlu/boosthub/blob/master/LICENSE.txt
