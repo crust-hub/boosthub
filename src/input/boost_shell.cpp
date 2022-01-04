@@ -4,16 +4,30 @@
 #include <stdlib.h>
 #include <limits.h>
 
+/**
+ * @brief Construct a new boost shell::boost shell object
+ *
+ */
 boost_shell::boost_shell()
 {
     this->USER.set_socket_fd(-1);
 }
 
+/**
+ * @brief Construct a new boost shell::boost shell object
+ *
+ * @param socket_fd
+ */
 boost_shell::boost_shell(int socket_fd)
 {
     this->USER.set_socket_fd(socket_fd);
 }
 
+/**
+ * @brief 开始接收客户端命令行
+ *
+ * @param shell
+ */
 void boost_shell::run(std::string shell)
 {
     if (this->USER.get_socket_fd() == -1)
@@ -27,11 +41,21 @@ void boost_shell::run(std::string shell)
     }
 }
 
+/**
+ * @brief 设置客户端套接字
+ *
+ * @param socket_fd
+ */
 void boost_shell::set_socket_fd(int socket_fd)
 {
     this->USER.set_socket_fd(socket_fd);
 }
 
+/**
+ * @brief 命令行匹配
+ *
+ * @param shell 要解析的命令行
+ */
 void boost_shell::patch(std::string &shell)
 {
     std::vector<std::string> words = word_split(shell);
@@ -62,6 +86,10 @@ void boost_shell::patch(std::string &shell)
     }
 }
 
+/**
+ * @brief ls command
+ *
+ */
 void boost_shell::ls()
 {
     /*发送根目录信息*/
@@ -87,7 +115,11 @@ void boost_shell::ls()
     write(socket_fd, ">>", strlen(">>"));
 }
 
-/*cd命令*/
+/**
+ * @brief cd command
+ *
+ * @param words
+ */
 void boost_shell::cd(std::vector<std::string> &words)
 {
     std::string new_path = get_target_path(words[1]);
@@ -111,7 +143,13 @@ void boost_shell::cd(std::vector<std::string> &words)
     }
 }
 
-//检查是否为cd命令
+/**
+ * @brief check cd command
+ *
+ * @param words
+ * @return true
+ * @return false
+ */
 bool boost_shell::check_cd(std::vector<std::string> &words)
 {
     if (2 != words.size())
@@ -127,7 +165,13 @@ bool boost_shell::check_cd(std::vector<std::string> &words)
     return true;
 }
 
-//检查是否为ls命令
+/**
+ * @brief check ls command
+ *
+ * @param words
+ * @return true
+ * @return false
+ */
 bool boost_shell::check_ls(std::vector<std::string> &words)
 {
     bool result = (1 == words.size() && words[0] == "ls");
@@ -138,6 +182,12 @@ bool boost_shell::check_ls(std::vector<std::string> &words)
     return result;
 }
 
+/**
+ * @brief string trim function
+ *
+ * @param s
+ * @return std::string&
+ */
 std::string &boost_shell::string_trim(std::string &s)
 {
     if (s.empty())
@@ -149,7 +199,12 @@ std::string &boost_shell::string_trim(std::string &s)
     return s;
 }
 
-//分割字符串并将其如"cd /fdcd/edw/gbf" => string[]={"cd","/fd/edw/gbf"}
+/**
+ * @brief 分割字符串并将其如"cd /fdcd/edw/gbf" => string[]={"cd","/fd/edw/gbf"}
+ *
+ * @param s
+ * @return std::vector<std::string>
+ */
 std::vector<std::string> boost_shell::word_split(std::string &s)
 {
     s = string_trim(s);
@@ -187,7 +242,13 @@ std::vector<std::string> boost_shell::word_split(std::string &s)
     return result;
 }
 
-//检查是否为pwd命令
+/**
+ * @brief check pwd command
+ *
+ * @param words
+ * @return true
+ * @return false
+ */
 bool boost_shell::check_pwd(std::vector<std::string> &words)
 {
     if (words.empty())
@@ -210,7 +271,10 @@ bool boost_shell::check_pwd(std::vector<std::string> &words)
     return false;
 }
 
-// send "Illegal command. Please check your input information"
+/**
+ * @brief send "Illegal command. Please check your input information" to client
+ *
+ */
 void boost_shell::send_illegal()
 {
     int socket_fd = this->USER.get_socket_fd(); //获得用户套接字
@@ -218,7 +282,13 @@ void boost_shell::send_illegal()
     write(socket_fd, message, strlen(message));
 }
 
-//检查是否为get命令
+/**
+ * @brief get command
+ *
+ * @param words
+ * @return true
+ * @return false
+ */
 bool boost_shell::check_get(std::vector<std::string> &words)
 {
     if (words.empty() || 2 != words.size())
@@ -248,13 +318,18 @@ bool boost_shell::check_get(std::vector<std::string> &words)
     }
     else
     { //打开文件失败
-        std::string error_message = "打开文件失败 "+target_path+"\n";
+        std::string error_message = "打开文件失败 " + target_path + "\n";
         LOG_TOOL.error(error_message.c_str());
     }
     return true;
 }
 
-//根据用户指定路径 获得绝对路径
+/**
+ * @brief
+ *
+ * @param path 根据用户指定路径 获得绝对路径
+ * @return std::string
+ */
 std::string boost_shell::get_target_path(std::string &path)
 {
     /*执行cd逻辑判断 获取要cd的绝对路径*/

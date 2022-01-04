@@ -3,13 +3,16 @@
 #define __DIR_READER_H__
 #include <iostream>
 #include <string>
-/*Folder reader*/
-class dir_reader{
+
+//问价夹读取器
+class dir_reader
+{
 private:
-    std::string URI_;
+    std::string URI_; //资源定位符
 public:
     dir_reader();
     dir_reader(std::string URI);
+
 public:
     std::string get_URI();
 };
