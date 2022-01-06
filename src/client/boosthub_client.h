@@ -26,5 +26,27 @@ private:
 public:
     boosthub_client(char *ip, char *port);
     int connect_server();
+    // get 协议头部解析
+    size_t static get_file_size_check(char *buffer)
+    {
+        int len = strlen(buffer);
+        if (len < 3)
+            return -1;
+        if (buffer[len - 1] != '\n' || buffer[len - 2] != '\n')
+        {
+            return -1;
+        }
+        for (int i = 0; i <= len - 3; i++)
+        {
+            if (!(buffer[i] >= '0' && buffer[i] <= '9'))
+            { //必须为全数字
+                return false;
+            }
+        }
+        //将字符串转变为数字
+        buffer[len - 2] = '\0';
+        long size = atol(buffer);
+        return size;
+    }
 };
 #endif

@@ -38,7 +38,7 @@ void *socket_process_thread(void *client_socket)
     size_t len = 0;
     tool_bucket TOOL;
     boost_shell SHELL;
-    SHELL.set_socket_fd(client_socket_id);
+    SHELL.set_socket_fd(client_socket_id);//shell 与 服务端id绑定
     while (1)
     {
         len = recv(client_socket_id, buffer, sizeof(buffer), 0);
@@ -49,7 +49,7 @@ void *socket_process_thread(void *client_socket)
         }
         buffer[len] = '\0';
         printf("READE : %s\n", buffer);
-        SHELL.run(std::string(buffer));
+        SHELL.run(std::string(buffer));//解析命令行 向客户端响应
     }
 
     TOOL.BOOST_LOG->close();

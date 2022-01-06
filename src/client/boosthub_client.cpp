@@ -1,6 +1,6 @@
 #include "./boosthub_client.h"
 
-pthread_mutex_t client_send_receiver_mutex;
+pthread_mutex_t get_receiver_mutex;
 
 /**
  * @brief 客户端接收线程函数
@@ -13,16 +13,25 @@ void *boosthub_client_receiver(void *socket_fd)
     //定义缓冲区
     char buffer[512] = {0};
     size_t len;
-    printf("receiving...\n");
-    while (0 != (len = read(socket, buffer, 511)))
+    printf("receiving working...\n");
+    bool receive_state = 1; //接受工作状态
+    while (receive_state && 0 != (len = read(socket, buffer, 511)))
     {
         buffer[len] = '\0';
         // pthread_mutex_lock(&client_send_receiver_mutex);
-        printf("%s", buffer);
         // pthread_mutex_unlock(&client_send_receiver_mutex);
         // sleep(1);
+        size_t file_size = boosthub_client::get_file_size_check(buffer);
+        if (file_size != -1)
+        {
+            printf("有文件要接收大小为 %zd\n", file_size);
+        }
+        else
+        {
+            printf("\n[**%d**]:%s", len, buffer);
+        }
     }
-    printf("receive over\n");
+    printf("receive work over\n");
 }
 
 /**
@@ -76,14 +85,14 @@ int boosthub_client::connect_server()
     {
         printf("connect server success...\n");
         //开启接收线程
-        pthread_mutex_init(&client_send_receiver_mutex, NULL); //收发锁
+        pthread_mutex_init(&get_receiver_mutex, NULL); //收文件锁
         pthread_t response;
         int response_id;
         response_id = pthread_create(&response, NULL, boosthub_client_receiver, (void *)&socket_fd);
         sleep(1);
         //允许客户端发送命令行
         shell_sender();
-        pthread_mutex_destroy(&client_send_receiver_mutex);
+        pthread_mutex_destroy(&get_receiver_mutex); //销毁收文件锁
         // void *retavl;
         //  pthread_join(response, &retavl);
     }

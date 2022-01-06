@@ -105,14 +105,13 @@ void boost_shell::ls()
     write(socket_fd, buffer, strlen(buffer));
     sprintf(buffer, "\n%-16s\t%-16s\t%-16s\n\0", "Fd", "Name", "Type");
     write(socket_fd, buffer, strlen(buffer));
-
     /*目录遍历*/
     for (int i = 0; i < files.size(); i++)
     {
         sprintf(buffer, "%-16d\t%-16s\t%-16c\n\0", files[i].fd, files[i].name.c_str(), files[i].type);
         write(socket_fd, buffer, strlen(buffer));
     }
-    write(socket_fd, ">>", strlen(">>"));
+    write(socket_fd, ">>\n", strlen(">>\n"));
 }
 
 /**
@@ -303,11 +302,18 @@ bool boost_shell::check_get(std::vector<std::string> &words)
     std::string target_path = get_target_path(words[1]);
     //打开文件
     FILE *target_file = FILE_TOOL.open_file(target_path, "r");
-    if (target_file)
+    if (target_file) //文件描述符获取成功
     {
-        //打开文件成功,通过用户套接字发送给用户
         //定义缓冲区
         char buffer[512] = {0};
+        //协议规定先发送文件大小 例如 首行"123234323123143\n\n"
+        fseek(target_file, 0, SEEK_END);
+        size_t size = ftell(target_file); //获取文件大小 单位byte
+        fseek(target_file, 0, SEEK_SET);
+        printf("File Size %zd Byte\n", size);
+        //打开文件成功,通过用户套接字发送给用户
+        sprintf(buffer, "%zd\n\n\0", size);
+        write(this->USER.get_socket_fd(), buffer, strlen(buffer)); //发送文件大小
         size_t count;
         while ((count = fread(buffer, 1, 512, target_file)) > 0)
         {
