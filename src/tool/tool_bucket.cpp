@@ -1,5 +1,7 @@
 #include "./tool_bucket.h"
+
 bool tool_bucket::exist = false;
+
 /**
  * @brief Construct a new tool bucket::tool bucket object
  *
@@ -12,10 +14,11 @@ tool_bucket::tool_bucket()
         ARG_PROCESS = new arg_process();
         FILE_OPERATOR = new file_operator();
         tool_bucket::exist = true;
+        BOOST_LOG->info("create tool_bucket instamce success");
     }
     else
     {
-        std::cerr << "tool_bucket.exist == true 单例已经存在\n";
+        std::cerr << "tool_bucket.exist is true,it's exist" << std::endl;
     }
 }
 /**
