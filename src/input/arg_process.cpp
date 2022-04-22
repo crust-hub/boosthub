@@ -36,7 +36,7 @@ int arg_process::process()
         printf("Server Info: IP %s PORT %s\n", _argv[2], _argv[3]);
         /*net service*/
         boost_socket socket(_argv[2], _argv[3]); //创建本机套接字
-        socket.service_start();                  //开始网络对外服务
+        socket.service_start();                  //开始网络对外服务 进程进入循环accept监听
         return 1;
     }
     //客户端shell

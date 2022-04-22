@@ -32,6 +32,10 @@ tool_bucket::~tool_bucket()
     delete FILE_OPERATOR;
 }
 
+//创建一个实例
+
+tool_bucket boosthub_tool_bucket;
+
 /**
  * @brief 网络收发线程函数
  *
@@ -40,7 +44,7 @@ tool_bucket::~tool_bucket()
  */
 void *socket_process_thread(void *client_socket)
 {
-    printf("Event: new client thread start\n");
+    boosthub_tool_bucket.BOOST_LOG->info("Event: new client thread start");
     int client_socket_id = *(int *)client_socket;
     free(client_socket);
     // std::cout<<"开启socket处理线程 client_socket "<<client_socket_id<<"\n";
@@ -60,12 +64,11 @@ void *socket_process_thread(void *client_socket)
             break;
         }
         buffer[len] = '\0';
-        printf("READE : %s\n", buffer);
+        boosthub_tool_bucket.BOOST_LOG->info(buffer);
         SHELL.run(std::string(buffer)); //解析命令行 向客户端响应
     }
-
-    TOOL.BOOST_LOG->close();
-    printf("Event: client disconnect\n");
+    boosthub_tool_bucket.BOOST_LOG->close();
+    boosthub_tool_bucket.BOOST_LOG->info("Event: client disconnect");
     //断开连接
     shutdown(client_socket_id, SHUT_WR);
     close(client_socket_id);
@@ -93,7 +96,3 @@ int new_socket_process_thread(int client_socket)
     }
     return create_res;
 }
-
-//创建一个实例
-
-tool_bucket boosthub_tool_bucket;

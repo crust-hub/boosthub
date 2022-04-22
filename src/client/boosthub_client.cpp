@@ -1,4 +1,8 @@
 #include "./boosthub_client.h"
+#include "../tool/tool_bucket.h"
+#include <cstring>
+
+extern tool_bucket boosthub_tool_bucket;
 
 pthread_mutex_t get_receiver_mutex;
 
@@ -8,12 +12,15 @@ pthread_mutex_t get_receiver_mutex;
  */
 void *boosthub_client_receiver(void *socket_fd)
 {
+    char str[100] = {'\0'};
     int socket = *((int *)socket_fd);
-    std::cout << "start receive thread:socket" << socket << "\n";
+    sprintf(str, "start receive thread:socket %d", socket);
+    boosthub_tool_bucket.BOOST_LOG->info(str);
     //定义缓冲区
     char buffer[512] = {0};
     size_t len;
-    printf("receiving working...\n");
+    sprintf(str, "receiving working...");
+    boosthub_tool_bucket.BOOST_LOG->info(str);
     bool receive_state = 1; //接受工作状态
     while (receive_state && 0 != (len = read(socket, buffer, 511)))
     {
@@ -24,14 +31,16 @@ void *boosthub_client_receiver(void *socket_fd)
         size_t file_size = boosthub_client::get_file_size_check(buffer);
         if (file_size != -1)
         {
-            printf("有文件要接收大小为 %zd\n", file_size);
+            sprintf(str, "有文件要接收大小为 %zd", file_size);
+            boosthub_tool_bucket.BOOST_LOG->info(str);
         }
         else
         {
             printf("\n[**%d**]:%s", len, buffer);
         }
     }
-    printf("receive work over\n");
+    sprintf(str, "receive work over");
+    boosthub_tool_bucket.BOOST_LOG->info(str);
 }
 
 /**
