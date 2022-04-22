@@ -3,8 +3,8 @@
 #define __FILE_INIT__
 
 /**
- * @brief 问价初始化器
- *
+ * @brief 文件初始化器
+ * 负责检查文件是否存在、主要做出不存在时的行动
  */
 class file_init
 {

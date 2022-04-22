@@ -1,13 +1,22 @@
-#include "tool.h"
+#include "./tool_bucket.h"
+bool tool_bucket::exist = false;
 /**
  * @brief Construct a new tool bucket::tool bucket object
  *
  */
 tool_bucket::tool_bucket()
 {
-    BOOST_LOG = new boost_log();
-    ARG_PROCESS = new arg_process();
-    FILE_OPERATOR = new file_operator();
+    if (tool_bucket::exist == false)
+    {
+        BOOST_LOG = new boost_log();
+        ARG_PROCESS = new arg_process();
+        FILE_OPERATOR = new file_operator();
+        tool_bucket::exist = true;
+    }
+    else
+    {
+        std::cerr << "tool_bucket.exist == true 单例已经存在\n";
+    }
 }
 /**
  * @brief Destroy the tool bucket::tool bucket object
@@ -38,7 +47,7 @@ void *socket_process_thread(void *client_socket)
     size_t len = 0;
     tool_bucket TOOL;
     boost_shell SHELL;
-    SHELL.set_socket_fd(client_socket_id);//shell 与 服务端id绑定
+    SHELL.set_socket_fd(client_socket_id); // shell 与 服务端id绑定
     while (1)
     {
         len = recv(client_socket_id, buffer, sizeof(buffer), 0);
@@ -49,7 +58,7 @@ void *socket_process_thread(void *client_socket)
         }
         buffer[len] = '\0';
         printf("READE : %s\n", buffer);
-        SHELL.run(std::string(buffer));//解析命令行 向客户端响应
+        SHELL.run(std::string(buffer)); //解析命令行 向客户端响应
     }
 
     TOOL.BOOST_LOG->close();
@@ -81,3 +90,7 @@ int new_socket_process_thread(int client_socket)
     }
     return create_res;
 }
+
+//创建一个实例
+
+tool_bucket boosthub_tool_bucket;

@@ -17,12 +17,14 @@ void *socket_process_thread(void *client_socket);
 int new_socket_process_thread(int client_socket);
 
 /**
- * @brief 工具桶
+ * @brief 工具桶 单例
  *
  */
 class tool_bucket
 {
-private:
+public:
+    static bool exist;
+
 public:
     tool_bucket();
     ~tool_bucket();

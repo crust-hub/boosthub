@@ -19,7 +19,7 @@ arg_process::arg_process(int argc, char ***argv)
 }
 
 /**
- * @brief 处理与相应任务执行
+ * @brief 处理与相应任务执行boosthub-cli
  *
  * @return int
  */
@@ -43,11 +43,11 @@ int arg_process::process()
     if (_argc == 4 && !strcmp(_argv[1], "--shell"))
     {
         printf("Client Info: Trying to connect to the boothub IP %s PORT %s\n", _argv[2], _argv[3]);
-        boosthub_client BOOSTHUB_CLIENT(_argv[2], _argv[3]);
-        BOOSTHUB_CLIENT.connect_server(); //连接服务器并运行发主进程与收线程
+        boosthub_client BOOSTHUB_CLIENT(_argv[2], _argv[3]); //将ip与端口给客户端服务
+        BOOSTHUB_CLIENT.connect_server();                    //连接服务器并运行发主进程与收线程
         return 1;
     }
-    //帮助文档
+    // cli-help帮助文档
     if (_argc == 2 && !strcmp(_argv[1], "--help"))
     {
         result_none();

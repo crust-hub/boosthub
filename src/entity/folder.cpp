@@ -1,11 +1,15 @@
 #include "folder.h"
-#include "../tool/tool.h"
+#include "../tool/tool_bucket.h"
+
+extern tool_bucket boosthub_tool_bucket;
+
 /**
  * @brief 获得此文件夹下的文件列表
  *
  * @return std::vector<file>
  */
-std::vector<file> folder::get_list()
+std::vector<file>
+folder::get_list()
 {
     return this->list;
 }
@@ -28,9 +32,7 @@ void folder::set_list(std::vector<file> list)
  */
 folder folder::enter_subfolder(std::string subfolder_name)
 {
-    tool_bucket *TOOL = new tool_bucket();
     std::string path = this->path + subfolder_name;
-    folder result = TOOL->FILE_OPERATOR->read_folder(path.c_str());
-    delete TOOL;
+    folder result = boosthub_tool_bucket.FILE_OPERATOR->read_folder(path.c_str());
     return result;
 }

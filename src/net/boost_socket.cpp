@@ -1,6 +1,8 @@
 #include "boost_socket.h"
 #include <iostream>
-#include "../tool/tool.h"
+#include "../tool/tool_bucket.h"
+
+extern tool_bucket boosthub_tool_bucket;
 
 /**
  * @brief Construct a new boost socket::boost socket object
