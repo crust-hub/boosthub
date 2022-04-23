@@ -159,15 +159,16 @@ It's more like a useful, useless little toy that can also be used when needed.
 ## the project structure  
 
 ```text
-src (Source code)
-├── client (Client shell service)  
-├── entity (Entity object class)  
-├── file (File related operations)  
-├── input (Processing user input)  
-├── log (Logging tools)  
-├── tool (Tool inheritance encapsulation)  
-├── net (Network control layer)  
-├── protocol (Communication protocol)  
+src #source code
+├── client #client shell service  
+├── entity #Entity object class  
+├── file #file related operations  
+├── input #processing user input  
+├── log #logging tools  
+├── tool #tool inheritance encapsulation  
+├── net #network control layer  
+├── protocol #communication protocol  
+├── warehouse #server file warehouse layer  
 └── main.cpp   
 ```
 
