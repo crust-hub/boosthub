@@ -14,11 +14,11 @@ tool_bucket::tool_bucket()
         ARG_PROCESS = new arg_process();
         FILE_OPERATOR = new file_operator();
         tool_bucket::exist = true;
-        BOOST_LOG->info("create tool_bucket instamce success");
+        BOOST_LOG->info("create tool_bucket instance success");
     }
     else
     {
-        std::cerr << "tool_bucket.exist is true,it's exist" << std::endl;
+        tool_bucket::instance.BOOST_LOG->error("tool_bucket.exist is true,it's exist");
     }
 }
 /**
@@ -33,66 +33,5 @@ tool_bucket::~tool_bucket()
 }
 
 //创建一个实例
-
 tool_bucket boosthub_tool_bucket;
-
-/**
- * @brief 网络收发线程函数
- *
- * @param client_socket 新的服务端套接字描述符
- * @return void*
- */
-void *socket_process_thread(void *client_socket)
-{
-    boosthub_tool_bucket.BOOST_LOG->info("Event: new client thread start");
-    int client_socket_id = *(int *)client_socket;
-    free(client_socket);
-    // std::cout<<"开启socket处理线程 client_socket "<<client_socket_id<<"\n";
-    //每次接收到请求都因该开辟新的线程 对其做出处理 包括接收数据与发送数据
-    //读取内容
-    char buffer[512] = {0};
-    size_t len = 0;
-    tool_bucket TOOL;
-    boost_shell SHELL;
-    SHELL.set_socket_fd(client_socket_id); // shell 与 服务端id绑定
-    while (1)
-    {
-        len = recv(client_socket_id, buffer, sizeof(buffer), 0);
-        if (len <= 0)
-        {
-            close(client_socket_id);
-            break;
-        }
-        buffer[len] = '\0';
-        boosthub_tool_bucket.BOOST_LOG->info(buffer);
-        SHELL.run(std::string(buffer)); //解析命令行 向客户端响应
-    }
-    boosthub_tool_bucket.BOOST_LOG->close();
-    boosthub_tool_bucket.BOOST_LOG->info("Event: client disconnect");
-    //断开连接
-    shutdown(client_socket_id, SHUT_WR);
-    close(client_socket_id);
-    return (void *)"sucess";
-}
-
-/**
- * @brief 服务函数 在其内部开启新的服务线程
- *
- * @param client_socket  客户端套接字
- * @return int 线程开启结果
- */
-int new_socket_process_thread(int client_socket)
-{
-    std::cout << client_socket << std::endl;
-    pthread_t thread;
-    int *arg = (int *)malloc(sizeof(int));
-    *arg = client_socket;
-    int create_res = pthread_create(&thread, NULL, socket_process_thread, (void *)arg);
-    if (create_res < 0)
-    {
-        std::cout << "socket线程创建失败\n";
-        shutdown(client_socket, SHUT_WR);
-        close(client_socket);
-    }
-    return create_res;
-}
+tool_bucket tool_bucket::instance = boosthub_tool_bucket;

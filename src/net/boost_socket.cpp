@@ -1,6 +1,7 @@
 #include "boost_socket.h"
 #include <iostream>
 #include "../tool/tool_bucket.h"
+#include "../tool/boosthub_thread.h"
 
 extern tool_bucket boosthub_tool_bucket;
 
@@ -55,7 +56,7 @@ void boost_socket::service_start()
         if (client_socket_id >= 0)
         {
             std::cout << "接收请求" << client_socket_id << "\n";
-            new_socket_process_thread(client_socket_id); //开启线程函数为新的client提供服务
+            boosthub_thread::new_socket_process_thread(client_socket_id); //开启线程函数为新的client提供服务
         }
         else
         {

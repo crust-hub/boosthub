@@ -11,9 +11,8 @@
 #include <netinet/in.h>
 #include <string.h>
 #include <error.h>
+#include <cctype>
 
-//接收线程函数
-void *boosthub_client_receiver(void *socket_fd);
 //客户端
 class boosthub_client
 {
@@ -30,22 +29,35 @@ public:
     size_t static get_file_size_check(char *buffer)
     {
         int len = strlen(buffer);
-        if (len < 3)
-            return -1;
-        if (buffer[len - 1] != '\n' || buffer[len - 2] != '\n')
+        if (len < 11)
         {
+            // std::cout << "length" << std::endl;
             return -1;
         }
-        for (int i = 0; i <= len - 3; i++)
+        //$$size$$number\n\n
+        if (!(buffer[0] == '$' && buffer[1] == '$' && buffer[2] == 's' && buffer[3] == 'i' && buffer[4] == 'z' && buffer[5] == 'e' && buffer[6] == '$' && buffer[7] == '$' && buffer[len - 1] == '\n' && buffer[len - 2] == '\n'))
         {
-            if (!(buffer[i] >= '0' && buffer[i] <= '9'))
-            { //必须为全数字
-                return false;
+            // std::cout << "limit" << std::endl;
+            return -1;
+        }
+        for (int i = 8; i <= len - 3; i++)
+        {
+            if (!isalnum(buffer[i]))
+            {
+                // std::cout << "num limit" << std::endl;
+                return -1;
             }
         }
         //将字符串转变为数字
+        char file_size_str[512] = {'\0'};
         buffer[len - 2] = '\0';
-        long size = atol(buffer);
+        size_t i = 8;
+        for (i = 8; i < strlen(buffer); i++)
+        {
+            file_size_str[i - 8] = buffer[i];
+        }
+        file_size_str[i - 8] = '\0';
+        long size = atol(file_size_str);
         return size;
     }
 };

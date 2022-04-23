@@ -11,11 +11,6 @@
 #include "../input/boost_shell.h"
 #include <pthread.h>
 
-//线程函数
-void *socket_process_thread(void *client_socket);
-//对外服务函数
-int new_socket_process_thread(int client_socket);
-
 /**
  * @brief 工具桶 单例
  *
@@ -24,6 +19,9 @@ class tool_bucket
 {
 public:
     static bool exist;
+
+private:
+    static tool_bucket instance;
 
 public:
     tool_bucket();

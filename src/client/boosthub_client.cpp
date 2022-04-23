@@ -1,47 +1,10 @@
+#include <cstring>
 #include "./boosthub_client.h"
 #include "../tool/tool_bucket.h"
-#include <cstring>
+#include "../tool/boosthub_thread.h"
 
 extern tool_bucket boosthub_tool_bucket;
-
-pthread_mutex_t get_receiver_mutex;
-
-/**
- * @brief 客户端接收线程函数
- *
- */
-void *boosthub_client_receiver(void *socket_fd)
-{
-    char str[100] = {'\0'};
-    int socket = *((int *)socket_fd);
-    sprintf(str, "start receive thread:socket %d", socket);
-    boosthub_tool_bucket.BOOST_LOG->info(str);
-    //定义缓冲区
-    char buffer[512] = {0};
-    size_t len;
-    sprintf(str, "receiving working...");
-    boosthub_tool_bucket.BOOST_LOG->info(str);
-    bool receive_state = 1; //接受工作状态
-    while (receive_state && 0 != (len = read(socket, buffer, 511)))
-    {
-        buffer[len] = '\0';
-        // pthread_mutex_lock(&client_send_receiver_mutex);
-        // pthread_mutex_unlock(&client_send_receiver_mutex);
-        // sleep(1);
-        size_t file_size = boosthub_client::get_file_size_check(buffer);
-        if (file_size != -1)
-        {
-            sprintf(str, "有文件要接收大小为 %zd", file_size);
-            boosthub_tool_bucket.BOOST_LOG->info(str);
-        }
-        else
-        {
-            printf("\n[**%d**]:%s", len, buffer);
-        }
-    }
-    sprintf(str, "receive work over");
-    boosthub_tool_bucket.BOOST_LOG->info(str);
-}
+extern pthread_mutex_t get_receiver_mutex;
 
 /**
  * @brief Construct a new boosthub client::boosthub client object
@@ -97,7 +60,7 @@ int boosthub_client::connect_server()
         pthread_mutex_init(&get_receiver_mutex, NULL); //收文件锁
         pthread_t response;
         int response_id;
-        response_id = pthread_create(&response, NULL, boosthub_client_receiver, (void *)&socket_fd);
+        response_id = pthread_create(&response, NULL, boosthub_thread::boosthub_client_receiver, (void *)&socket_fd);
         sleep(1);
         //允许客户端发送命令行
         shell_sender();

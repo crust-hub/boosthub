@@ -305,17 +305,17 @@ bool boost_shell::check_get(std::vector<std::string> &words)
     if (target_file) //文件描述符获取成功
     {
         //定义缓冲区
-        char buffer[512] = {0};
+        char buffer[5120] = {'\0'};
         //协议规定先发送文件大小 例如 首行"123234323123143\n\n"
         fseek(target_file, 0, SEEK_END);
         size_t size = ftell(target_file); //获取文件大小 单位byte
         fseek(target_file, 0, SEEK_SET);
         printf("File Size %zd Byte\n", size);
         //打开文件成功,通过用户套接字发送给用户
-        sprintf(buffer, "%zd\n\n\0", size);
+        sprintf(buffer, "$$size$$%zd\n\n\0", size);                //协议头
         write(this->USER.get_socket_fd(), buffer, strlen(buffer)); //发送文件大小
         size_t count;
-        while ((count = fread(buffer, 1, 512, target_file)) > 0)
+        while ((count = fread(buffer, 1, 5119, target_file)) > 0)
         {
             write(this->USER.get_socket_fd(), buffer, count);
         }
