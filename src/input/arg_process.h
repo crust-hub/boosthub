@@ -16,8 +16,8 @@ private:
 
 public:
     //状态码
-    static const int DOWNLOADFILE = 0;
-    static const int UPLOADFILE = 1;
+    static const int HELP = 0;
+    static const int END = 1;
     static const int ERROR = 2;
     arg_process();
     arg_process(int argc, char ***argv);

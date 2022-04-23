@@ -28,7 +28,7 @@ int arg_process::process()
     if (_argc == 0 || _argv == nullptr || _argc == 1)
     {
         result_none();
-        return this->ERROR;
+        return arg_process::ERROR;
     }
     //开启服务端
     if (_argc == 4 && !strcmp(_argv[1], "--server"))
@@ -37,7 +37,7 @@ int arg_process::process()
         /*net service*/
         boost_socket socket(_argv[2], _argv[3]); //创建本机套接字
         socket.service_start();                  //开始网络对外服务 进程进入循环accept监听
-        return 1;
+        return arg_process::END;
     }
     //客户端shell
     if (_argc == 4 && !strcmp(_argv[1], "--shell"))
@@ -45,16 +45,16 @@ int arg_process::process()
         printf("Client Info: Trying to connect to the boothub IP %s PORT %s\n", _argv[2], _argv[3]);
         boosthub_client BOOSTHUB_CLIENT(_argv[2], _argv[3]); //将ip与端口给客户端服务
         BOOSTHUB_CLIENT.connect_server();                    //连接服务器并运行发主进程与收线程
-        return 1;
+        return arg_process::END;
     }
     // cli-help帮助文档
     if (_argc == 2 && !strcmp(_argv[1], "--help"))
     {
         result_none();
-        return 1;
+        return arg_process::HELP;
     }
     result_none();
-    return this->DOWNLOADFILE;
+    return arg_process::HELP;
 }
 
 void arg_process::result_none()
