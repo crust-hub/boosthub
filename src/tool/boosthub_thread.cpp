@@ -1,7 +1,6 @@
 #include "./boosthub_thread.h"
 #include "../tool/tool_bucket.h"
 #include "../protocol/boosthub_http.h"
-#include <string>
 
 extern tool_bucket boosthub_tool_bucket;
 extern boosthub_http boosthub_http_instance;
@@ -33,14 +32,20 @@ void *boosthub_thread::socket_process_thread(void *client_socket)
             break;
         }
         buffer[len] = '\0';
-        boosthub_tool_bucket.BOOST_LOG->info(buffer);
-        SHELL.run(std::string(buffer)); //解析命令行 向客户端响应
         // feture::计划做出http相应的功能
-        // receive_content += std::string(buffer); //累计接收内容
+        receive_content += std::string(buffer); //累计接收内容
         // 检测是否为HTTP请求
-        // std::size_t header_size = boosthub_http_instance.header_check(receive_content);
+        std::size_t header_size = boosthub_http_instance.header_check(receive_content, 8 * 1024);
+        //如果有机会获取HTTP头部则进行头部分析
+        std::map<std::string, std::string> http_header = boosthub_http_instance.header_analysis(receive_content, header_size);
+        if (http_header.size() == 0) // HTTP解析优先
+        {
+            SHELL.run(std::string(buffer)); //解析命令行 向客户端响应
+        }
+        std::cout << http_header[std::string("Method")] << std::endl;
+        std::cout << http_header[std::string("URL")] << std::endl;
+        std::cout << http_header[std::string("Version")] << std::endl;
     }
-    boosthub_tool_bucket.BOOST_LOG->close();
     boosthub_tool_bucket.BOOST_LOG->info("Event: client disconnect");
     //断开连接
     shutdown(client_socket_id, SHUT_WR);
