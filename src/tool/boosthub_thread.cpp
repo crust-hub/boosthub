@@ -1,6 +1,7 @@
 #include "./boosthub_thread.h"
 #include "../tool/tool_bucket.h"
 #include "../protocol/boosthub_http.h"
+#include "../protocol/http_handler.h"
 
 extern tool_bucket boosthub_tool_bucket;
 extern boosthub_http boosthub_http_instance;
@@ -34,17 +35,23 @@ void *boosthub_thread::socket_process_thread(void *client_socket)
         buffer[len] = '\0';
         // feture::计划做出http相应的功能
         receive_content += std::string(buffer); //累计接收内容
+        std::size_t http_resolve_flag = receive_content.size();
         // 检测是否为HTTP请求
         std::size_t header_size = boosthub_http_instance.header_check(receive_content, 8 * 1024);
         //如果有机会获取HTTP头部则进行头部分析
         std::map<std::string, std::string> http_header = boosthub_http_instance.header_analysis(receive_content, header_size);
-        if (http_header.size() == 0) // HTTP解析优先
+        if (http_header.size() == 0) // HTTP解析优先如果没有检测到HTTP
         {
-            SHELL.run(std::string(buffer)); //解析命令行 向客户端响应
+            // SHELL.run(std::string(buffer)); //解析命令行 向客户端响应
         }
-        std::cout << http_header[std::string("Method")] << std::endl;
-        std::cout << http_header[std::string("URL")] << std::endl;
-        std::cout << http_header[std::string("Version")] << std::endl;
+        else //根据请求头判断是HTTP
+        {
+            //读取body部分，ERROR 可能遭受攻击线程挂起不会结束问题
+            std::string body = boosthub_http_instance.read_body(client_socket_id, http_header, receive_content);
+            //对请求做出响应
+            http_handler::handle(client_socket_id, http_header, body);
+            break; //结束对此客户端服务
+        }
     }
     boosthub_tool_bucket.BOOST_LOG->info("Event: client disconnect");
     //断开连接

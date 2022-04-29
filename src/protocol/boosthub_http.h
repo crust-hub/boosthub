@@ -2,6 +2,8 @@
 #include <vector>
 #include <iostream>
 #include <map>
+#include <sys/socket.h>
+#include <cstring>
 /**
  * @brief boosthub http protocol
  *
@@ -22,11 +24,22 @@ public:
     std::size_t header_check(std::string &buffer, std::size_t max_length);
 
     /**
-     * @brief HTTP 头部分析
+     * @brief HTTP 头部分析,头部分析成功时，也会将其缓存进行清理保存\r\n\r\n的下一位
      *
      * @param buffer 接收缓冲
+     * @param header_end_index header结束标志\r\n\r\n 第一个\r的下标
      */
     std::map<std::string, std::string> header_analysis(std::string &buffer, std::size_t header_end_index);
+
+    /**
+     * @brief 从套接字socket中读取HTTP Body部分
+     *
+     * @param socket socket文件标识符
+     * @param http_header http头部信息
+     * @param out_buffer 外部字符串缓冲区，接收内容初始化部分,处理在它处已经读出一部分的处理，当此函数读取后会将缓存其清空
+     * @return std::string body内容
+     */
+    std::string read_body(int socket, std::map<std::string, std::string> http_header, std::string &out_buffer);
 
     /**
      * @brief 将字符串根据指定字符进行split
@@ -59,5 +72,22 @@ public:
             ++index;
         }
         return result;
+    }
+
+    /**
+     * @brief 根据key查找是否有响应的key
+     *
+     * @param header http头部
+     * @param key 要找的key
+     * @return std::string 如果有则返回响应value否则返回空串
+     */
+    static std::string map_has_key(std::map<std::string, std::string> &header, std::string key)
+    {
+        auto l_it = header.end();
+        l_it = header.find(key);
+        if (l_it == header.end())
+            return std::string("");
+        else
+            return l_it->second; //返回value
     }
 };
