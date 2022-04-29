@@ -32,14 +32,13 @@ public:
     std::map<std::string, std::string> header_analysis(std::string &buffer, std::size_t header_end_index);
 
     /**
-     * @brief 从套接字socket中读取HTTP Body部分
+     * @brief 从套接字socket中判断body大小
      *
      * @param socket socket文件标识符
      * @param http_header http头部信息
-     * @param out_buffer 外部字符串缓冲区，接收内容初始化部分,处理在它处已经读出一部分的处理，当此函数读取后会将缓存其清空
-     * @return std::string body内容
+     * @return std::size_t content-length大小
      */
-    std::string read_body(int socket, std::map<std::string, std::string> http_header, std::string &out_buffer);
+    std::size_t read_body(int socket, std::map<std::string, std::string> http_header);
 
     /**
      * @brief 将字符串根据指定字符进行split

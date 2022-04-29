@@ -35,7 +35,7 @@ std::size_t boosthub_http::header_check(std::string &buffer, std::size_t max_len
         }
     }
     //限制HTTP头部缓冲大小
-    if (header_end_index == 0 && buffer.size() > max_length)
+    if (header_end_index == 0 && max_length != 0 && buffer.size() > max_length)
     {
         buffer = ""; //清空buffer
     }
@@ -101,44 +101,18 @@ std::map<std::string, std::string> boosthub_http::header_analysis(std::string &b
     return header_content;
 }
 
-std::string boosthub_http::read_body(int socket, std::map<std::string, std::string> http_header, std::string &out_buffer)
+std::size_t boosthub_http::read_body(int socket, std::map<std::string, std::string> http_header)
 {
-    std::string buffer = out_buffer;
-    out_buffer = std::string("");
     std::string method = boosthub_http::map_has_key(http_header, std::string("Method"));
     std::string content_type = boosthub_http::map_has_key(http_header, std::string("Content-Type"));
     std::string content_length_str = boosthub_http::map_has_key(http_header, std::string("Content-Length"));
+    std::string transfer_encoding = boosthub_http::map_has_key(http_header, std::string("Transfer-Encoding"));
     if (method == "" || content_type == "" || content_length_str == "")
     {
-        return buffer;
+        return 0;
     }
     auto content_length = std::stoull(content_length_str);
-    // std::cout << "Method " << method << std::endl;
-    // std::cout << "Content-Type " << content_type << std::endl;
-    // std::cout << "Content-Length " << content_length << std::endl;
-    // std::cout << "准备接收请求体部分" << std::endl;
-    if (buffer.size() >= content_length)
-    {
-        return buffer;
-    }
-    char char_buffer[512];
-    std::size_t read_len = 0;
-    //接收剩余请求体部分
-    while (1)
-    {
-        read_len = recv(socket, char_buffer, sizeof(char_buffer) - 1, 0);
-        std::cout << "read_len " << read_len << " content-length " << content_length << " buffer_size " << strlen(buffer.c_str()) << std::endl;
-        if (read_len <= 0)
-        {
-            break;
-        }
-        buffer += std::string(char_buffer);
-        if (buffer.size() >= content_length || buffer.size() > 8 * 1024) //请求体大小限制
-        {
-            break;
-        }
-    }
-    return buffer;
+    return content_length;
 }
 
 //创建单例
