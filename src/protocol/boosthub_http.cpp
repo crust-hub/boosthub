@@ -1,4 +1,8 @@
 #include "./boosthub_http.h"
+#include "../tool/tool_bucket.h"
+
+extern tool_bucket boosthub_tool_bucket;
+
 /**
  * @brief Construct a new boosthub http::boosthub http object
  *
@@ -7,25 +11,25 @@ boosthub_http::boosthub_http()
 {
 }
 
-std::size_t boosthub_http::header_check(std::string &buffer, std::size_t max_length)
+std::size_t boosthub_http::header_check(boosthub_buffer &buffer, std::size_t max_length)
 {
     //探测HTTP头部是否可以获取检测\r\n\r\n
     std::size_t header_end_index = 0;
-    for (std::size_t i = 0; i < buffer.size(); i++)
+    for (std::size_t i = 0; i < buffer.get_length(); i++)
     {
-        if (i < buffer.size() - 3)
+        if (i < buffer.get_length() - 3)
         {
-            if (buffer[i] == '\r' && buffer[i + 1] == '\n' && buffer[i + 2] == '\r' && buffer[i + 3] == '\n')
+            if (buffer.buffer[i] == '\r' && buffer.buffer[i + 1] == '\n' && buffer.buffer[i + 2] == '\r' && buffer.buffer[i + 3] == '\n')
             {
-                header_end_index = i;
+                header_end_index = i + 4;
                 break;
             }
         }
-        else if (i < buffer.size() - 1)
+        else if (i < buffer.get_size() - 1)
         {
-            if (buffer[i] == '\n' && buffer[i + 1] == '\n')
+            if (buffer.buffer[i] == '\n' && buffer.buffer[i + 1] == '\n')
             {
-                header_end_index = i;
+                header_end_index = i + 2;
                 break;
             }
         }
@@ -35,14 +39,14 @@ std::size_t boosthub_http::header_check(std::string &buffer, std::size_t max_len
         }
     }
     //限制HTTP头部缓冲大小
-    if (header_end_index == 0 && max_length != 0 && buffer.size() > max_length)
+    if (header_end_index == 0 && max_length != 0 && buffer.get_length() > max_length)
     {
-        buffer = ""; //清空buffer
+        buffer.clear(); //清空buffer
     }
     return header_end_index;
 }
 
-std::map<std::string, std::string> boosthub_http::header_analysis(std::string &buffer, std::size_t header_end_index)
+std::map<std::string, std::string> boosthub_http::header_analysis(boosthub_buffer &buffer, std::size_t header_end_index)
 {
     std::map<std::string, std::string> header_content;
     if (header_end_index <= 0)
@@ -50,8 +54,7 @@ std::map<std::string, std::string> boosthub_http::header_analysis(std::string &b
         return header_content;
     }
     //截取头部部分
-    std::string header = buffer.substr(0, header_end_index + 1);
-    std::cout << header << std::endl;
+    std::string header = std::string(buffer.buffer, buffer.buffer + header_end_index);
     //分离\n
     std::vector<std::string> rows = boosthub_http::string_split(header, '\n', 0);
     if (rows.size() == 0)
@@ -87,17 +90,6 @@ std::map<std::string, std::string> boosthub_http::header_analysis(std::string &b
             header_content.insert(std::pair<std::string, std::string>(header_row_splited[0], header_row_splited[1]));
         }
     }
-    //将buffer中的http头部部分清理掉
-    if (buffer[header_end_index] == '\n' && buffer[header_end_index + 1] == '\n')
-    {
-        buffer = buffer.substr(header_end_index + 2, (buffer.size() - 1) - (header_end_index + 2) + 1);
-    }
-    else
-    {
-        buffer = buffer.substr(header_end_index + 4, (buffer.size() - 1) - (header_end_index + 4) + 1);
-    }
-    // std::cout << "clean part of header content" << std::endl;
-    // std::cout << buffer << std::endl;
     return header_content;
 }
 
@@ -113,6 +105,41 @@ std::size_t boosthub_http::read_body(int socket, std::map<std::string, std::stri
     }
     auto content_length = std::stoull(content_length_str);
     return content_length;
+}
+
+std::vector<std::string> boosthub_http::string_split(std::string &str, const char ch, const std::size_t count)
+{
+    std::vector<std::string> result;
+    std::size_t last_index = 0;
+    std::size_t index = 0;
+    std::size_t process_count = 0;
+    //探测字符串
+    for (auto now_ch : str)
+    {
+        if (count != 0 && process_count == count) //处理了count后，则直接将后面的处理掉
+        {
+            result.push_back(str.substr(last_index, str.size() - last_index));
+            return result;
+        }
+        if (now_ch == ch || index == str.size() - 1)
+        {
+            result.push_back(str.substr(last_index, index - last_index));
+            last_index = index + 1;
+            process_count++;
+        }
+        ++index;
+    }
+    return result;
+}
+
+std::string boosthub_http::map_has_key(std::map<std::string, std::string> &header, std::string key)
+{
+    auto l_it = header.end();
+    l_it = header.find(key);
+    if (l_it == header.end())
+        return std::string("");
+    else
+        return l_it->second; //返回value
 }
 
 //创建单例

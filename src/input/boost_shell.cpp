@@ -1,8 +1,12 @@
 #include "boost_shell.h"
+#include "../tool/tool_bucket.h"
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
 #include <limits.h>
+#include <bits/stdc++.h>
+
+extern tool_bucket boosthub_tool_bucket;
 
 /**
  * @brief Construct a new boost shell::boost shell object
@@ -18,7 +22,7 @@ boost_shell::boost_shell()
  *
  * @param socket_fd
  */
-boost_shell::boost_shell(int socket_fd)
+boost_shell::boost_shell(int &socket_fd)
 {
     this->USER.set_socket_fd(socket_fd);
 }
@@ -30,12 +34,20 @@ boost_shell::boost_shell(int socket_fd)
  */
 void boost_shell::run(std::string shell)
 {
-    if (this->USER.get_socket_fd() == -1)
+    boosthub_tool_bucket.BOOST_LOG->info("shell to run");
+    //检测shell是否是一行命令而不是多行
+    std::size_t target = count(shell.begin(), shell.end(), '\n');
+    if (target > 1) // shell为多行则拒绝服务
     {
         return;
     }
+    if (this->USER.get_socket_fd() == -1)
+    {
+        boosthub_tool_bucket.BOOST_LOG->info("this->USER.get_socket_fd() == -1");
+        return;
+    }
     /*对命令行进行解析*/
-    if (shell.size() > 0)
+    if (shell.length() > 0)
     {
         patch(shell);
     }
@@ -46,7 +58,7 @@ void boost_shell::run(std::string shell)
  *
  * @param socket_fd
  */
-void boost_shell::set_socket_fd(int socket_fd)
+void boost_shell::set_socket_fd(int &socket_fd)
 {
     this->USER.set_socket_fd(socket_fd);
 }
@@ -61,29 +73,7 @@ void boost_shell::patch(std::string &shell)
     std::vector<std::string> words = word_split(shell);
     /*命令行模式匹配*/
     /******************** ls 命令 **********************/
-    if (check_ls(words))
-    {
-        /******************** cd 命令 **********************/
-    }
-    else if (check_cd(words))
-    {
-
-        /******************** pwd 命令 **********************/
-    }
-    else if (check_pwd(words))
-    {
-
-        /******************** get 命令 **********************/
-    }
-    else if (check_get(words))
-    {
-
-        /******************** not finded 命令 **********************/
-    }
-    else
-    {
-        send_illegal(); //告诉用户它的指令是非法的
-    }
+    bool check = check_ls(words) || check_cd(words) || check_pwd(words) || check_get(words) || send_illegal();
 }
 
 /**
@@ -124,12 +114,12 @@ void boost_shell::cd(std::vector<std::string> &words)
     std::string new_path = get_target_path(words[1]);
     //检查是否为根路径
     //检查是否返回上级(涉及到多级问题，可能要先进行获取DIR然后文件夹存在 则使用文件夹的真实绝对路径)
-    std::cout << "cd命令 新路径为: " << new_path << std::endl;
+    boosthub_tool_bucket.BOOST_LOG->info((std::string("cd命令 新路径为: ") + new_path).c_str());
     //检查文件夹是否存在
     if (FILE_TOOL.check_folder_path_real(new_path.c_str()))
     {
         this->USER.set_nowpath(new_path);
-        std::cout << "文件夹存在\n";
+        boosthub_tool_bucket.BOOST_LOG->info("文件夹存在");
         char buffer[512] = {0};
         int socket_fd = this->USER.get_socket_fd(); //获得用户套接字
         /*头部信息*/
@@ -138,7 +128,7 @@ void boost_shell::cd(std::vector<std::string> &words)
     }
     else
     {
-        std::cout << "文件夹不存在\n";
+        boosthub_tool_bucket.BOOST_LOG->info("文件夹不存在");
     }
 }
 
@@ -234,10 +224,6 @@ std::vector<std::string> boost_shell::word_split(std::string &s)
         }
         word = word + s[i];
     }
-    /*
-        for(long i=0;i<result.size();i++){
-            std::cout<<"word"<<i<<" :"<<result[i]<<std::endl;
-        }*/
     return result;
 }
 
@@ -274,11 +260,14 @@ bool boost_shell::check_pwd(std::vector<std::string> &words)
  * @brief send "Illegal command. Please check your input information" to client
  *
  */
-void boost_shell::send_illegal()
+bool boost_shell::send_illegal()
 {
     int socket_fd = this->USER.get_socket_fd(); //获得用户套接字
+    if (socket_fd == -1)
+        return false;
     const char *message = "Illegal command. Please check your input information\n\0";
     write(socket_fd, message, strlen(message));
+    return true;
 }
 
 /**
@@ -310,7 +299,11 @@ bool boost_shell::check_get(std::vector<std::string> &words)
         fseek(target_file, 0, SEEK_END);
         size_t size = ftell(target_file); //获取文件大小 单位byte
         fseek(target_file, 0, SEEK_SET);
-        printf("File Size %zd Byte\n", size);
+
+        char info[512] = "\0";
+        sprintf(info, "File Size %zd Byte", size);
+        boosthub_tool_bucket.BOOST_LOG->info(info);
+
         //打开文件成功,通过用户套接字发送给用户
         sprintf(buffer, "$$size$$%zd\n\n\0", size);                //协议头
         write(this->USER.get_socket_fd(), buffer, strlen(buffer)); //发送文件大小
@@ -325,7 +318,7 @@ bool boost_shell::check_get(std::vector<std::string> &words)
     else
     { //打开文件失败
         std::string error_message = "打开文件失败 " + target_path + "\n";
-        LOG_TOOL.error(error_message.c_str());
+        boosthub_tool_bucket.BOOST_LOG->error(error_message.c_str());
     }
     return true;
 }
@@ -345,7 +338,7 @@ std::string boost_shell::get_target_path(std::string &path)
         concat_path = path;
     }
     char *real_new_path = realpath(concat_path.c_str(), NULL);
-    std::cout << "拼接后的路径 " << concat_path << std::endl;
+    boosthub_tool_bucket.BOOST_LOG->info((std::string("拼接后的路径") + concat_path).c_str());
     std::string new_path = std::string("/");
     if (real_new_path != NULL)
     {

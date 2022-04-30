@@ -2,6 +2,8 @@
 #include "../tool/tool_bucket.h"
 #include "../protocol/boosthub_http.h"
 #include "../protocol/http_handler.h"
+#include "../tool/boosthub_buffer.h"
+#include "../protocol/http_request.h"
 #include <cstdlib>
 
 extern tool_bucket boosthub_tool_bucket;
@@ -15,37 +17,57 @@ extern boosthub_http boosthub_http_instance;
  */
 void *boosthub_thread::socket_process_thread(void *client_socket)
 {
-    boosthub_tool_bucket.BOOST_LOG->info("Event: new client thread start");
     int client_socket_id = *(int *)client_socket; //获取客户端套接字
     free(client_socket);                          //在主线程向此线程传递参数使用了堆内存，子线程获取后将其内存释放掉
+    boost_shell SHELL;                            //为此socket创建shell处理工具
+    SHELL.set_socket_fd(client_socket_id);        // shell 与 服务端id绑定
     //每次接收到请求都因该开辟新的线程 对其做出处理 包括接收数据与发送数据
     //读取内容
     char buffer[512] = {0};
     size_t len = 0;
-    boost_shell SHELL;                     //为此socket创建shell处理工具
-    SHELL.set_socket_fd(client_socket_id); // shell 与 服务端id绑定
-    std::string receive_content = "";
+    boosthub_buffer receive_buffer;
     while (1) //监听客户端发送的内容
     {
         len = recv(client_socket_id, buffer, sizeof(buffer) - 1, 0);
         if (len <= 0) // socket异常或者断开
         {
             close(client_socket_id);
+            client_socket_id = -1;
             break;
         }
         buffer[len] = '\0';
-        boosthub_tool_bucket.BOOST_LOG->info(buffer);
-        SHELL.run(std::string(buffer)); //解析命令行 向客户端响应
-        // feture::计划做出http相应的功能
-        // receive_content += std::string(buffer); //累计接收内容
+        receive_buffer.push_back(buffer, len); //追加到缓冲区内
         // 检测是否为HTTP请求
-        // std::size_t header_size = boosthub_http_instance.header_check(receive_content);
+        std::size_t header_size = boosthub_http_instance.header_check(receive_buffer, 0);
+        std::map<std::string, std::string> header = boosthub_http_instance.header_analysis(receive_buffer, header_size);
+
+        if (header.size() != 0) //是http请求
+        {
+            http_request request(header);
+            //判断请求体已经接收了多少字节
+            std::size_t body_received_size = receive_buffer.get_length() - header_size; //则已经收到请求体的字节大小为body_received_size
+            if (body_received_size == request.content_length)
+            {
+                request.request_body = receive_buffer.buffer + header_size; //找到请求体在缓存中的开始地址
+                http_handler::handle(client_socket_id, request);
+            }
+            else if (body_received_size > request.content_length) //超出content-length,则拒绝处理此请求，此处暗藏了没有content-length的情况
+            {
+                receive_buffer.clear(); //清空接收缓存
+            }
+        }
+        else
+        {
+            SHELL.run(std::string(buffer)); //解析命令行 向客户端响应
+        }
     }
-    boosthub_tool_bucket.BOOST_LOG->close();
     boosthub_tool_bucket.BOOST_LOG->info("Event: client disconnect");
     //断开连接
-    shutdown(client_socket_id, SHUT_WR);
-    close(client_socket_id);
+    if (client_socket_id != -1)
+    {
+        shutdown(client_socket_id, SHUT_WR);
+        close(client_socket_id);
+    }
     return (void *)"sucess";
 }
 
