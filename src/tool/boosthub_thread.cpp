@@ -49,7 +49,12 @@ void *boosthub_thread::socket_process_thread(void *client_socket)
             if (body_received_size == request.content_length)
             {
                 request.request_body = receive_buffer.buffer + header_size; //找到请求体在缓存中的开始地址
-                http_handler::handle(client_socket_id, request);
+                bool res = http_handler::handle(client_socket_id, request); //当返回true时代表可以进行关闭连接了
+                if (res)
+                {
+                    receive_buffer.clear();
+                    break;
+                }
             }
             else if (body_received_size > request.content_length) //超出content-length,则拒绝处理此请求，此处暗藏了没有content-length的情况
             {

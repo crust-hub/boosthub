@@ -77,7 +77,9 @@ void boosthub_buffer::clear()
 {
     if (this->buffer)
     {
-        free(this->buffer);
+        if (this->buffer != nullptr)
+            free(this->buffer);
+        this->buffer = nullptr;
         this->size = 0;
         this->length = 0;
     }

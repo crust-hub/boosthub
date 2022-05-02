@@ -20,7 +20,6 @@ public:
                 ltm->tm_min,
                 ltm->tm_sec);
         std::string result = std::string(back);
-        std::cout << "boosthub_time " << result << std::endl;
         delete back;
         return result;
     }
