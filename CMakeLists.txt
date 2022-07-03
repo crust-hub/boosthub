@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.10.0)
 project(boosthub)
 
 SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -Wall -O2")
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -std=c++11 -Wall -O2")
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -std=c++17 -Wall -O2")
 
 FIND_PACKAGE(Threads)
 

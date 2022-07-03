@@ -78,14 +78,14 @@ int boosthub_client::connect_server()
 void boosthub_client::shell_sender()
 {
     //定义缓冲区
-    char buffer[512] = {0};
+    std::string buffer = "";
     size_t len = 0;
-    while (0 != strcmp(buffer, "exit"))
+    while (buffer != "exit")
     {
         // pthread_mutex_lock(&client_send_receiver_mutex);
-        gets(buffer);
-        len = strlen(buffer);
-        write(socket_fd, buffer, len);
+        std::getline(std::cin, buffer);
+        len = buffer.length();
+        write(socket_fd, buffer.c_str(), len);
         // pthread_mutex_unlock(&client_send_receiver_mutex);
         // sleep(1);
     }

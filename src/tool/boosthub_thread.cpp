@@ -5,6 +5,7 @@
 #include "../tool/boosthub_buffer.h"
 #include "../protocol/http_request.h"
 #include <cstdlib>
+#include <thread>
 
 extern tool_bucket boosthub_tool_bucket;
 extern boosthub_http boosthub_http_instance;
@@ -87,20 +88,26 @@ int boosthub_thread::new_socket_process_thread(int client_socket)
     char info[200] = {'\0'};
     sprintf(info, "new client socket %d", client_socket);
     boosthub_tool_bucket.BOOST_LOG->info(info);
-    //创建新的socket_process_thread线程任务
-    pthread_t thread;
-    int *arg = (int *)malloc(sizeof(int));
-    *arg = client_socket;
-    int create_res = pthread_create(&thread, NULL, boosthub_thread::socket_process_thread, (void *)arg);
-    //线程创建失败
-    if (create_res < 0)
+    try
+    {
+        std::thread m_thread([client_socket]() -> void
+                             {
+                            std::cout<<__FILE__<<" "<<__LINE__<<" new thread start\n"<<std::flush;
+                            int *arg = (int *)malloc(sizeof(int));
+                            *arg = client_socket;
+                            boosthub_thread::socket_process_thread(arg); });
+        m_thread.detach(); //线程分离
+    }
+    catch (...)
     {
         sprintf(info, "new boosthub_thread::socket_process_thread thread create failed");
         boosthub_tool_bucket.BOOST_LOG->error(info);
         shutdown(client_socket, SHUT_WR); //与客户端套接字断开
         close(client_socket);             //关闭套接字
+        return -1;
     }
-    return create_res; //返回线程创建状态
+
+    return 1; //返回线程创建状态
 }
 
 /**
