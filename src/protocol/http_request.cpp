@@ -5,6 +5,7 @@ http_request::http_request(std::map<std::string, std::string> header)
     this->method = header["Method"];
     this->url = header["URL"];
     this->version = header["Version"];
+    this->content_type = header["Content-Type"];
     char *end_pos;
     this->content_length = std::strtoull(header["Content-Length"].c_str(), &end_pos, 10);
 }

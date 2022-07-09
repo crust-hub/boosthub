@@ -1,22 +1,38 @@
-# userDoc
+# Document
 
-## why boosthub?
+quick start about boosthub,lightweight file transition
 
-1、why not use the FTP?
+## quick run
 
-Of course, you can use the FTP tool, which is just a small personal project built for the fun of coding. It has great shortcomings, but I also want to use my own ideas to make my own satisfactory tools. So, we just think of it as an interesting little toy.  
+```bash
+sudo bash ./boosthub.sh
+```
 
-2、network protocol
+## start server or shell client
 
-Custom communication protocols over TCP/IP. Custom communication protocols on top of TCP/IP, showcasing does not guarantee your data security, but will certainly do its best.  
+```bash
+sudo boosthub --server 0.0.0.0 8080  
+# start the server-side boothub service  
 
-3、Easy to deploy
+sudo boosthub --shell 127.0.0.1 8080  
+# client shell connection server  
+```
 
-Users without experience in program development and shell commands can also quickly deploy and run on the server and operate on their file repositories with remote clients.
+## web client
 
-4、Just to be clear
+using chrome to visit the web page  
 
-It's more like a useful, useless little toy that can also be used when needed.
+* index page  
+
+`IP:8080/`or`IP:8080/index.html`  
+
+![indexpage](./img/indexpage.jpg)
+
+* upload page
+
+`IP:8080/upload` or `IP:8080/upload.html`  
+
+![uploadpage](./img/uploadpage.jpg)
 
 ## client shell
 

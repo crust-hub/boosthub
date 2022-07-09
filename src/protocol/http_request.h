@@ -11,6 +11,7 @@ public:
     std::string method;
     std::string url;
     std::string version;
+    std::string content_type;
     std::size_t content_length;
     std::map<std::string, std::string> header;
     char *request_body;

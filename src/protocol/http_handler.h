@@ -25,95 +25,90 @@ public:
     {
         extern tool_bucket boosthub_tool_bucket; //引用日志实例
         constexpr bool open_receive_service = true;
+        // POST /
         if (request.url == "/" && request.method == "POST" && open_receive_service && request.content_length > 0)
         {
-            const char *body = request.request_body;
-            file_operator FILE_OPERATOR;
-            char boosthub_path[1024] = "\0";
-            FILE_OPERATOR.get_exe_path(boosthub_path);
-            strcat(boosthub_path, "/warehouse");
-            // create log dir
-            FILE_OPERATOR.create_dir(boosthub_path, 0777); //检测仓库文件夹如果没有则进行创建
-            char filename[1024];
-            std::string time_str = boosthub_time::get();
-            const char *time = time_str.c_str();
-            sprintf(filename, "%s/%s_%d.body", boosthub_path, time, socket);
-            if (body)
-            {
-                boosthub_tool_bucket.BOOST_LOG->info("create new http body file");
-                std::ofstream outfile;
-                outfile.open(filename, std::ios::out | std::ios::binary | std::ios::trunc); //输入文件的路径
-                outfile.write(body, request.content_length);
-                outfile.close(); //调用close（）函数关闭文件
-                return true;
-            }
-        }
-        // response
-        if (request.method == "GET" && (request.url == "/" || request.url == "/index.html"))
-        {
-            route_root(socket, request);
+            http_handler::upload_data(socket, request);
             return true;
         }
-        return false;
+        // GET /
+        if (request.method == "GET" && (request.url == "/" || request.url == "/index.html"))
+        {
+            http_handler::route_root(socket, request);
+            return true;
+        }
+        // GET /upload
+        if (request.method == "GET" && (request.url == "/upload" || request.url == "/upload.html"))
+        {
+            http_handler::upload(socket, request);
+            return true;
+        }
+        http_handler::res_404(socket, request);
+        return true;
     }
 
 private:
-    static void route_root(int socket, http_request request)
+    // GET /
+    static void route_root(int socket, const http_request &request)
+    {
+#include "./asset/index_html.h"
+        page_sender(index_html, socket);
+    }
+
+    // GET /upload
+    static void upload(int socket, const http_request &request)
+    {
+#include "./asset/upload_html.h"
+        page_sender(upload_html, socket);
+    }
+
+    // POST /
+    static void upload_data(int socket, const http_request &request)
+    {
+        std::cout << __FILE__ << " " << __LINE__ << " " << request.content_type << std::endl;
+        const char *body = request.request_body;
+        file_operator FILE_OPERATOR;
+        char boosthub_path[1024] = "\0";
+        FILE_OPERATOR.get_exe_path(boosthub_path);
+        strcat(boosthub_path, "/warehouse");
+        // create log dir
+        FILE_OPERATOR.create_dir(boosthub_path, 0777); //检测仓库文件夹如果没有则进行创建
+        char filename[1024];
+        std::string time_str = boosthub_time::get();
+        const char *time = time_str.c_str();
+        sprintf(filename, "%s//%s_%d.body", boosthub_path, time, socket);
+        if (body)
+        {
+            std::ofstream outfile;
+            outfile.open(filename, std::ios::out | std::ios::binary | std::ios::trunc); //输入文件的路径
+            outfile.write(body, request.content_length);
+            outfile.close(); //调用close（）函数关闭文件
+        }
+#include "./asset/upload_html.h"
+        page_sender(upload_html, socket);
+    }
+
+    // res 404
+    static void res_404(int socket, const http_request &request)
+    {
+        std::string res_404 = "HTTP/1.0 404\n\n";
+        size_t res = write(socket, res_404.c_str(), res_404.size());
+    }
+
+private:
+    static void page_sender(const char *html, int socket)
     {
         std::vector<const char *> headers;
         headers.push_back("HTTP/1.0 200\n");
         headers.push_back("Content-Type: text/html;charset:utf-8;\n");
-        const char *response_body =
-            "<!DOCTYPE html>\
-            <html lang =\"en\">\
-                <head>\
-                    <meta charset = \"UTF-8\">\
-                    <title> boosthub </title>\
-                    <style>\
-                        *{\
-                            color:#fafafa;\
-                            border:0px;\
-                            margin:0px;\
-                            padding:0px;\
-                         }\
-                         header,footer{\
-                            padding:1rem;\
-                            height:5rem;\
-                            display:flex;\
-                            justify-content:flex-start;\
-                            align-items:center;\
-                            background-color:#1d1d1f;\
-                         }\
-                         main{\
-                            min-height:calc(100vh - 14rem);\
-                            display:flex;\
-                            justify-content:center;\
-                            align-items:center;\
-                            background-color:#1d1d1f;\
-                         }\
-                    </style>\
-                </head>\
-                <body>\
-                    <header>\
-                        <span>Boosthub</span>\
-                    </header>\
-                    <main>\
-                        <h1>Hi , get <a href=\"https://github.com/gaowanlu/boosthub\">boosthub</a> now.</h1>\
-                    </main>\
-                    <footer>\
-                        <span>2022 design by <a href=\"https://github.com/gaowanlu\">@wanlu</a></span>\
-                    </footer>\
-                </body>\
-            </html>";
         char line3[512];
-        sprintf(line3, "Content-Length: %zd\n\n", strlen(response_body));
+        sprintf(line3, "Content-Length: %zd\n\n", strlen(html));
         headers.push_back(line3);
         for (auto header_str : headers)
         {
-            write(socket, header_str, strlen(header_str));
+            size_t res = write(socket, header_str, strlen(header_str));
         }
-        write(socket, response_body, strlen(response_body));
+        size_t res = write(socket, html, strlen(html));
     }
 };
 #endif
-//'HTTP/1.1 404' 'Content-Type: text/html' 'Content-Length: 4413' 'Date: Fri, 29 Apr 2022 01:36:05 GMT'

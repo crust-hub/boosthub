@@ -2,7 +2,7 @@
 
 linux applications for lightweight file storage repositories and file transfer tools .
 
-## get start
+## depoly
 
 ### prepare
 
@@ -12,7 +12,7 @@ sudo apt install g++ gcc make cmake git
 sudo apt install glibc-doc manpages-posix-dev 
 ```
 
-### get boosthub
+### build
 
 ```bash
 git clone https://github.com/gaowanlu/boosthub.git  
@@ -32,27 +32,23 @@ Install the project...
 -- Installing: /usr/bin/boosthub
 ```
 
-### use boosthub
+### help
 
 ```bash
 sudo boosthub --help
 #view help information
-
-sudo boosthub --server 0.0.0.0 1234  
-# start the server-side boothub service  
-
-sudo boosthub --shell 127.0.0.1 1234  
-# client shell connection server  
 ```
 
 ## document
 
-[reading the detail to use it.](./boosthub.md)
+[reading the detail to use it.](./doc/README.md)
 
-## structure  
+## peoject structure  
 
 ```text
-src #source code
+doc      # document
+refactor # refactor plan
+src      # source code
 ├── client #client shell service  
 ├── entity #Entity object class  
 ├── file #file related operations  
