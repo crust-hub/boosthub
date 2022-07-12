@@ -290,7 +290,7 @@ bool boost_shell::check_get(std::vector<std::string> &words)
     //进行文件定位
     std::string target_path = get_target_path(words[1]);
     //打开文件
-    FILE *target_file = FILE_TOOL.open_file(target_path, "r");
+    FILE *target_file = FILE_TOOL.open_file(target_path, "rb");
     if (target_file) //文件描述符获取成功
     {
         //定义缓冲区

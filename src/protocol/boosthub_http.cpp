@@ -107,6 +107,14 @@ std::size_t boosthub_http::read_body(int socket, std::map<std::string, std::stri
     return content_length;
 }
 
+/**
+ * @brief 字符串split
+ *
+ * @param str
+ * @param ch 关键字
+ * @param count 处理的内容长度
+ * @return std::vector<std::string>
+ */
 std::vector<std::string> boosthub_http::string_split(std::string &str, const char ch, const std::size_t count)
 {
     std::vector<std::string> result;

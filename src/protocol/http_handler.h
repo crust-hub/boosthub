@@ -10,6 +10,7 @@
 #include "../file/file_operator.h"
 #include "../tool/boosthub_time.h"
 #include "../tool/tool_bucket.h"
+#include "../tool/mime_patch.h"
 
 class http_handler
 {
@@ -21,7 +22,7 @@ public:
      * @param http_header http请求头部信息
      * @param body http请求体
      */
-    static bool handle(int socket, http_request request)
+    static bool handle(int socket, const http_request &request)
     {
         extern tool_bucket boosthub_tool_bucket; //引用日志实例
         constexpr bool open_receive_service = true;
@@ -65,7 +66,15 @@ private:
     // POST /
     static void upload_data(int socket, const http_request &request)
     {
-        std::cout << __FILE__ << " " << __LINE__ << " " << request.content_type << std::endl;
+        std::string tail_name = "body";
+        try
+        {
+            std::vector<std::string> res = mime_patch::getExtentions(request.content_type);
+            tail_name = res[0];
+        }
+        catch (std::runtime_error e)
+        {
+        }
         const char *body = request.request_body;
         file_operator FILE_OPERATOR;
         char boosthub_path[1024] = "\0";
@@ -76,7 +85,7 @@ private:
         char filename[1024];
         std::string time_str = boosthub_time::get();
         const char *time = time_str.c_str();
-        sprintf(filename, "%s//%s_%d.body", boosthub_path, time, socket);
+        sprintf(filename, "%s/%s_%d.%s", boosthub_path, time, socket, tail_name.c_str());
         if (body)
         {
             std::ofstream outfile;

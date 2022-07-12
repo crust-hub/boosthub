@@ -9,6 +9,7 @@
 #include <thread>
 #include <memory>
 #include <cstdio>
+#include <utility>
 
 extern tool_bucket boosthub_tool_bucket;
 extern boosthub_http boosthub_http_instance;
@@ -95,7 +96,6 @@ int boosthub_thread::new_socket_process_thread(int client_socket)
     {
         std::thread m_thread([client_socket]() -> void
                              {
-                            std::cout<<__FILE__<<" "<<__LINE__<<" new thread start\n"<<std::flush;
                             int *arg = (int *)malloc(sizeof(int));
                             *arg = client_socket;
                             boosthub_thread::socket_process_thread(arg); });
@@ -137,13 +137,14 @@ void *boosthub_thread::boosthub_client_receiver(void *socket_fd)
     size_t receive_count = 0;
     size_t should_receive_count = 0;
     float receive_processing = 0;
-    FILE *receive_file_ptr = NULL;
+    int receive_file_ptr = -1;
     file_operator FILE_OPERATOR;
     while (receive_state && 0 != (len = read(socket, buffer, 5119))) //等待服务端发送来的数据
     {
-        buffer[len] = '\0';                                            //将数据以\0结尾
-        long file_size = boosthub_client::get_file_size_check(buffer); //检查发过来的是不是文件协议数据
-        if (file_size > 0)                                             //是文件协议数据
+        buffer[len] = '\0';                                                                      //将数据以\0结尾
+        std::pair<size_t, size_t> check_res = boosthub_client::get_file_size_check(buffer, len); //检查发过来的是不是文件协议数据
+        long file_size = check_res.first;
+        if (file_size > 0) //含有文件协议数据
         {
             should_receive_count = file_size; //文件协议数据需要接收多大
             receive_count = 0;                //清空已经接受计数
@@ -169,24 +170,29 @@ void *boosthub_thread::boosthub_client_receiver(void *socket_fd)
             //创建临时文件
             char path[512] = {'\0'};
             FILE_OPERATOR.get_exe_path(path);
+            strcat(path, "/storage");
+            FILE_OPERATOR.create_dir(path, 0777); //创建storage文件夹
             strcat(path, "/");
             strcat(path, receive_file_name.c_str());
             std::cout << std::string(path) << std::endl;
             FILE_OPERATOR.create_new_file(path, 0777);
-            //打开文件
-            if (receive_file_ptr != NULL)
+            if (receive_file_ptr != -1)
             {
-                fclose(receive_file_ptr);
+                close(receive_file_ptr);
             }
-            receive_file_ptr = fopen(path, "wb+");
+            receive_file_ptr = open(path, O_TRUNC | O_RDWR); //打开文件
+            //将buffer中去掉第一行协议声明的内容写入文件
+            //将buffer中的check_res.second个byte写入文件
+            write(receive_file_ptr, buffer, check_res.second);
+            receive_count += check_res.second;
         }
         else
         {
             if (should_receive_count != 0) //仍需接收数据
             {
                 receive_count += len; //将此次接收的数据长度加上
-                if (receive_file_ptr)
-                    fputs(buffer, receive_file_ptr);
+                if (receive_file_ptr != -1)
+                    write(receive_file_ptr, buffer, len);
                 //接收进度
                 float processing = ((float)receive_count / (float)should_receive_count) * 100;
                 if (processing - receive_processing > 0.97) //设置进度间隔打印
@@ -205,16 +211,16 @@ void *boosthub_thread::boosthub_client_receiver(void *socket_fd)
                 receive_count = 0; //清空已经接受计数
                 should_receive_count = 0;
                 receive_processing = 0; //接收进度回0
-                buffer[0] = '\0';
-                if (receive_file_ptr)
-                    fclose(receive_file_ptr);
-                receive_file_ptr = NULL;
-                *boosthub_client_shell_realtime_info = "";
+                if (-1 != receive_file_ptr)
+                    close(receive_file_ptr);
+                receive_file_ptr = -1;
+                *boosthub_client_shell_realtime_info = ""; //清空此时的get命令行
                 sprintf(str, "there a receive over");
                 boosthub_tool_bucket.BOOST_LOG->info(str);
             }
         }
         buffer[0] = '\0'; //缓存区字符串清零
+        len = 0;
     }
     sprintf(str, "receive work over");
     boosthub_tool_bucket.BOOST_LOG->info(str);
