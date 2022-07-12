@@ -1,10 +1,10 @@
 #include <cstring>
+#include <memory>
 #include "./boosthub_client.h"
 #include "../tool/tool_bucket.h"
 #include "../tool/boosthub_thread.h"
 
 extern tool_bucket boosthub_tool_bucket;
-extern pthread_mutex_t get_receiver_mutex;
 
 /**
  * @brief Construct a new boosthub client::boosthub client object
@@ -57,19 +57,19 @@ int boosthub_client::connect_server()
     {
         printf("connect server success...\n");
         //开启接收线程
-        pthread_mutex_init(&get_receiver_mutex, NULL); //收文件锁
         pthread_t response;
         int response_id;
         response_id = pthread_create(&response, NULL, boosthub_thread::boosthub_client_receiver, (void *)&socket_fd);
         sleep(1);
         //允许客户端发送命令行
         shell_sender();
-        pthread_mutex_destroy(&get_receiver_mutex); //销毁收文件锁
         // void *retavl;
         //  pthread_join(response, &retavl);
     }
     return 0;
 }
+
+std::shared_ptr<std::string> boosthub_client_shell_realtime_info = std::make_shared<std::string>("");
 
 /**
  * @brief 命令行发送器 主进程
@@ -82,13 +82,13 @@ void boosthub_client::shell_sender()
     size_t len = 0;
     while (buffer != "exit")
     {
-        // pthread_mutex_lock(&client_send_receiver_mutex);
+        //拷贝给全局变量作为收发线程通信数据以便接收数据时做出处理
+        *boosthub_client_shell_realtime_info = buffer;
         std::getline(std::cin, buffer);
         len = buffer.length();
         write(socket_fd, buffer.c_str(), len);
-        // pthread_mutex_unlock(&client_send_receiver_mutex);
-        // sleep(1);
     }
+
     std::cout << "exit shell...\n";
     close(socket_fd);
 }

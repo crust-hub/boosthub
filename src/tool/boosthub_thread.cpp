@@ -4,8 +4,11 @@
 #include "../protocol/http_handler.h"
 #include "../tool/boosthub_buffer.h"
 #include "../protocol/http_request.h"
+#include "../file/file_operator.h"
 #include <cstdlib>
 #include <thread>
+#include <memory>
+#include <cstdio>
 
 extern tool_bucket boosthub_tool_bucket;
 extern boosthub_http boosthub_http_instance;
@@ -110,11 +113,8 @@ int boosthub_thread::new_socket_process_thread(int client_socket)
     return 1; //返回线程创建状态
 }
 
-/**
- * @brief 客户端接收时不允许客户端向服务端发送内容，用于客户端的接收线程与主线程的同步
- *
- */
-pthread_mutex_t get_receiver_mutex;
+// client/boosthub_client.cpp
+extern std::shared_ptr<std::string> boosthub_client_shell_realtime_info;
 
 /**
  * @brief 为客户端开启socket接收线程
@@ -137,50 +137,84 @@ void *boosthub_thread::boosthub_client_receiver(void *socket_fd)
     size_t receive_count = 0;
     size_t should_receive_count = 0;
     float receive_processing = 0;
-    while (receive_state && 0 != (len = read(socket, buffer, 5119)))
+    FILE *receive_file_ptr = NULL;
+    file_operator FILE_OPERATOR;
+    while (receive_state && 0 != (len = read(socket, buffer, 5119))) //等待服务端发送来的数据
     {
-        buffer[len] = '\0';
-        // pthread_mutex_lock(&client_send_receiver_mutex);
-        // pthread_mutex_unlock(&client_send_receiver_mutex);
-        // sleep(1);
-        long file_size = boosthub_client::get_file_size_check(buffer);
-        if (file_size > 0)
+        buffer[len] = '\0';                                            //将数据以\0结尾
+        long file_size = boosthub_client::get_file_size_check(buffer); //检查发过来的是不是文件协议数据
+        if (file_size > 0)                                             //是文件协议数据
         {
-            should_receive_count = file_size; //需要接收多大
+            should_receive_count = file_size; //文件协议数据需要接收多大
             receive_count = 0;                //清空已经接受计数
             sprintf(str, "waiting receive %zd", file_size);
             boosthub_tool_bucket.BOOST_LOG->info(str);
+            const char *now_shell = boosthub_client_shell_realtime_info->c_str(); //获取此时命令行
+            //解析要创建的文件名称
+            std::string receive_file_name = "";
+            bool ok = false;
+            for (size_t i = 0; i < strlen(now_shell); i++)
+            {
+                if (now_shell[i] != ' ')
+                {
+                    // std::cout<<now_shell[i]<<std::endl;
+                    receive_file_name += std::string(1, now_shell[i]);
+                }
+                if (ok == false && receive_file_name == "get")
+                {
+                    receive_file_name = "";
+                    ok = true;
+                }
+            }
+            //创建临时文件
+            char path[512] = {'\0'};
+            FILE_OPERATOR.get_exe_path(path);
+            strcat(path, "/");
+            strcat(path, receive_file_name.c_str());
+            std::cout << std::string(path) << std::endl;
+            FILE_OPERATOR.create_new_file(path, 0777);
+            //打开文件
+            if (receive_file_ptr != NULL)
+            {
+                fclose(receive_file_ptr);
+            }
+            receive_file_ptr = fopen(path, "wb+");
         }
         else
         {
-            if (should_receive_count != 0)
+            if (should_receive_count != 0) //仍需接收数据
             {
-                receive_count += len;
-            }
-            if (should_receive_count != 0) //接收文件状态
-            {
+                receive_count += len; //将此次接收的数据长度加上
+                if (receive_file_ptr)
+                    fputs(buffer, receive_file_ptr);
+                //接收进度
                 float processing = ((float)receive_count / (float)should_receive_count) * 100;
-                if (processing - receive_processing > 0.97)
+                if (processing - receive_processing > 0.97) //设置进度间隔打印
                 {
                     receive_processing = processing; // update process
                     std::cout << "processing " << processing << " % " << std::endl;
                 }
             }
-            else // shell 相应状态
+            else // 如果不需要接收文件协议数据则直接将接收的内容输出
             {
                 printf("%s", buffer);
             }
             // std::cout << "receive_count " << receive_count << " should_receive_count " << should_receive_count << std::endl;
-            if (receive_count >= should_receive_count)
+            if (receive_count != 0 && receive_count >= should_receive_count) //如果接收的总长度已经满足文件协议声明的长度
             {
                 receive_count = 0; //清空已经接受计数
                 should_receive_count = 0;
                 receive_processing = 0; //接收进度回0
+                buffer[0] = '\0';
+                if (receive_file_ptr)
+                    fclose(receive_file_ptr);
+                receive_file_ptr = NULL;
+                *boosthub_client_shell_realtime_info = "";
                 sprintf(str, "there a receive over");
                 boosthub_tool_bucket.BOOST_LOG->info(str);
             }
         }
-        buffer[0] = '\0';
+        buffer[0] = '\0'; //缓存区字符串清零
     }
     sprintf(str, "receive work over");
     boosthub_tool_bucket.BOOST_LOG->info(str);
