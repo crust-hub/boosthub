@@ -305,7 +305,7 @@ bool boost_shell::check_get(std::vector<std::string> &words)
         boosthub_tool_bucket.BOOST_LOG->info(info);
 
         //打开文件成功,通过用户套接字发送给用户
-        sprintf(buffer, "$$size$$%zd\n\n\0", size);                //协议头
+        sprintf(buffer, "$$size$$%zd\n\n", size);                  //协议头
         write(this->USER.get_socket_fd(), buffer, strlen(buffer)); //发送文件大小
         size_t count;
         while ((count = fread(buffer, 1, 5119, target_file)) > 0)
