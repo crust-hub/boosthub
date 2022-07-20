@@ -93,15 +93,33 @@ private:
             outfile.write(body, request.content_length);
             outfile.close(); //调用close（）函数关闭文件
         }
-#include "./asset/upload_html.h"
-        page_sender(upload_html, socket);
+        //发送存储到内的文件信息
+        char res[512];
+        sprintf(res,"{\"id\":\"%s_%d.%s\"}",time,socket,tail_name.c_str());
+        res_JSON(res,socket);
     }
 
     // res 404
     static void res_404(int socket, const http_request &request)
     {
-        std::string res_404 = "HTTP/1.0 404\n\n";
+        static std::string res_404 = "HTTP/1.0 404\n\n";
         size_t res = write(socket, res_404.c_str(), res_404.size());
+    }
+
+    // res JSON
+    static void res_JSON(const char*json,int socket){
+        std::vector<const char *> headers;
+        headers.push_back("HTTP/1.0 200\n");
+        headers.push_back("Content-Type: application/json\n");
+        char line3[512];
+        sprintf(line3, "Content-Length: %zd\n\n", strlen(json));
+        headers.push_back(line3);
+        for (auto header_str : headers)
+        {
+            size_t res = write(socket, header_str, strlen(header_str));
+        }
+        size_t res = write(socket, json, strlen(json));
+        //std::cout<<std::string(json)<<std::endl;
     }
 
 private:
@@ -109,7 +127,7 @@ private:
     {
         std::vector<const char *> headers;
         headers.push_back("HTTP/1.0 200\n");
-        headers.push_back("Content-Type: text/html;charset:utf-8;\n");
+        headers.push_back("Content-Type: text/html\n");
         char line3[512];
         sprintf(line3, "Content-Length: %zd\n\n", strlen(html));
         headers.push_back(line3);

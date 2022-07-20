@@ -63,8 +63,10 @@ static const char *upload_html = "<!DOCTYPE html>\
                         });\
                         ajax.addEventListener(\"load\", (e)=>{\
                             if(e.currentTarget.status==200){\
-                                alert(\"upload success\");\
-                                location.reload();\
+                                let resJSON=JSON.parse(e.currentTarget.response);\
+                                console.log(resJSON);\
+                                console.log(e.currentTarget);\
+                                alert(\"file id is \"+resJSON.id);\
                             }\
                         });\
                         let blob=document.getElementById(\"file\").files[0];\
