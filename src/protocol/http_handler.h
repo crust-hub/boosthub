@@ -79,7 +79,7 @@ private:
         file_operator FILE_OPERATOR;
         char boosthub_path[1024] = "\0";
         FILE_OPERATOR.get_exe_path(boosthub_path);
-        strcat(boosthub_path, "/warehouse");
+        strcat(boosthub_path, "../sworks/static");
         // create log dir
         FILE_OPERATOR.create_dir(boosthub_path, 0777); //检测仓库文件夹如果没有则进行创建
         char filename[1024];

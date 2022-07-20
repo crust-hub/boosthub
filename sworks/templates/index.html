@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/11.5.0/highlight.min.js"></script>
+    <link href="https://cdn.bootcdn.net/ajax/libs/highlight.js/11.5.0/styles/a11y-dark.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0px;
+            padding: 0px;
+            border: 0px;
+            box-sizing: border-box;
+        }
+
+        main {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            min-height: calc(100vh - 3rem);
+            box-sizing: border-box;
+            padding: 1rem;
+            flex-wrap: wrap;
+            background-color: #363636;
+        }
+
+        body h1 {
+            color: #fafafa;
+        }
+
+        .links {
+            display: flex;
+            justify-content: space-around;
+            padding: 1rem;
+            box-sizing: border-box;
+        }
+
+        a {
+            color: #fafafa;
+            text-decoration: none;
+            font-size: 1rem;
+            background-color: rgba(255, 92, 86, 0.295);
+            padding: 0.2rem;
+            border-radius: 5px;
+        }
+
+        footer {
+            background-color: #363636;
+            /* background-color: #c5d4e2; */
+            padding: 1rem;
+            color: #fafafa;
+            border-top: 1px dashed rgb(255, 91, 86);
+        }
+
+        footer p {
+            text-align: center;
+            padding: 0.5rem;
+        }
+
+        header {
+            background-color: #363636;
+            padding: 0.5rem;
+            color: #1d1d1f;
+            height: 4rem;
+            border-bottom: 1px rgb(255, 91, 86) dashed;
+            display: flex;
+            align-items: center;
+        }
+
+        .red {
+            color: brown;
+        }
+
+        .title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-align: center;
+            color: #fafafa;
+            box-shadow: 5px 5px 5px 1px rgb(255, 91, 86);
+            border-radius: 0.3rem;
+            background-color: #52529742;
+            padding: 0.5rem;
+            margin: 0.8rem;
+        }
+
+        .logo_text {
+            color: rgb(255, 91, 86);
+            font-size: 1.3rem;
+            font-weight: bold;
+            height: 100%;
+            line-height: 3rem;
+        }
+
+        pre {
+            color: #fafafa;
+            padding: 1rem;
+            background-color: rgb(49, 49, 49);
+            border-radius: 5px;
+        }
+
+        .logo_img {
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 1.25rem;
+            margin-right: 1rem;
+            cursor: pointer;
+        }
+
+        .logo_img:hover {
+            border: 2px solid rgb(55, 212, 173);
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <img class="logo_img" src="/logo.png" />
+        <span class="logo_text">Works.js</span>
+    </header>
+    <main>
+        <div>
+            <div>
+                <p class="title">Building lightweight nodejs services</p>
+                <p class="red title">using javascript decorators</p>
+            </div>
+            <div class="links">
+                <a href="https://github.com/gaowanlu/Cours/tree/main/works">Github</a>
+                <a href="https://www.npmjs.com/package/works.js">Npm</a>
+            </div>
+        </div>
+        <section>
+            <pre>
+                <code class="language-javascript">
+const Works = require('works.js');
+@Works.routes
+class UserController {
+    @Works.route("/user/:id")
+    @Works.method(["PUT"])
+    async user(req, res, context) {
+        console.log("Welcome to work.js /user");
+        console.log(context);
+        res.end();
+    }
+    @Works.filter("/user/:id")
+    async userFilter(res,res,context){
+        //check auth
+        return true;
+    }
+}
+//Create a routes instance
+const userController = new UserController();
+            </code>
+        </pre>
+        </section>
+    </main>
+    <footer>
+        <p>Released under the <a href="https://opensource.org/licenses/MIT">MIT License</a></p>
+        <p>Copyright © 2022-Present <a href="https://github.com/gaowanlu">Gaowanlu</a></p>
+    </footer>
+</body>
+<script>
+    hljs.initHighlightingOnLoad();
+</script>
+
+</html>

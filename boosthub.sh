@@ -2,6 +2,4 @@ cmake . &&
 echo "cmake ." &&
 make &&
 echo "make ." &&
-./bin/boosthub --server 0.0.0.0 8080
-
-
+./bin/boosthub --server 0.0.0.0 20001 &

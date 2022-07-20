@@ -132,7 +132,7 @@ curl --location --request POST 'http://127.0.0.1:8080/' \
 how find file that was uploaded with http  
 
 ```cpp
-boosthub/bin/warehouse
+boosthub/sworks/static
 ```
 
 the format of file  
@@ -140,3 +140,4 @@ the format of file
 ```bash
 2022-5-3-0:59:8_7.body
 ```
+
