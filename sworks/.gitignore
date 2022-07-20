@@ -1,4 +1,4 @@
 node_modules/
-./static/*
-!./static/logo.png
+static/*
+!static/logo.png
 
